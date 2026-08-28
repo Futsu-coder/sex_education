@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import questions from '../data/questions'
-import { AnimatedNumber, Confetti } from '../components/ui'
+import { AnimatedNumber, Confetti, PageBlobs } from '../components/ui'
 
 const OPTION_COLORS = ['#dc2626', '#2563eb', '#d97706', '#0d9488']
 
@@ -58,11 +58,12 @@ function QuizPage() {
     const isPerfect = score === totalQuestions
     const isPass = score >= totalQuestions / 2
     return (
-      <div className="relative flex min-h-screen items-center justify-center px-4 py-8">
-        {showConfetti && <Confetti />}
-        <div className="w-full max-w-md animate-fade-up text-center">
+      <PageBlobs variant="quiz">
+        <div className="flex min-h-screen items-center justify-center px-4 py-8">
+          {showConfetti && <Confetti />}
+          <div className="w-full max-w-md animate-fade-up text-center">
           <div
-            className="relative rounded-3xl bg-white p-8 shadow-card ring-1 ring-slate-100"
+            className="relative rounded-3xl bg-white p-8 shadow-card border-2 border-[#cfd9e6]"
           >
             <span
               className="mx-auto mb-4 block w-20 h-20 rounded-full flex items-center justify-center text-5xl animate-pop"
@@ -108,12 +109,14 @@ function QuizPage() {
           </div>
         </div>
       </div>
+      </PageBlobs>
     )
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-4 py-8">
-      <div className="w-full max-w-2xl">
+    <PageBlobs variant="quiz">
+      <div className="flex min-h-screen items-center justify-center px-4 py-8">
+        <div className="w-full max-w-2xl">
         {/* Header bar */}
         <div className="mb-4 flex animate-fade-up items-center justify-between">
           <Link to="/" className="font-bold hover:underline">
@@ -124,7 +127,7 @@ function QuizPage() {
           </span>
         </div>
 
-        <div className="animate-fade-up rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-100 sm:p-8">
+        <div className="animate-fade-up rounded-3xl bg-white p-6 shadow-card border-2 border-[#cfd9e6] sm:p-8">
           {/* Progress */}
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-extrabold text-primary">
@@ -211,8 +214,9 @@ function QuizPage() {
             </span>
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </PageBlobs>
   )
 }
 

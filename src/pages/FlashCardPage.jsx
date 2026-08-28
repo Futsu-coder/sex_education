@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import flashcards from '../data/flashcards'
-import { Confetti } from '../components/ui'
+import { Confetti, PageBlobs } from '../components/ui'
 
 const CARD_COLORS = ['#2563eb', '#0d9488', '#7c3aed', '#2563eb', '#0d9488']
 const CARD_SHADOWS = ['#1d4ed8', '#0f766e', '#6d28d9', '#1d4ed8', '#0f766e']
@@ -86,9 +86,9 @@ function FlashCardPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <PageBlobs variant="flashcard">
       {showConfetti && <Confetti />}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
+      <div className="flex min-h-screen items-center justify-center px-4 py-8">
         <div className="w-full max-w-xl">
           {/* Header */}
           <div className="mb-4 flex animate-fade-up items-center justify-between">
@@ -98,7 +98,7 @@ function FlashCardPage() {
             >
               ← Flash Card
             </Link>
-            <span className="rounded-xl bg-white px-4 py-2 font-extrabold shadow-card ring-1 ring-slate-100">
+            <span className="rounded-xl bg-white px-4 py-2 font-extrabold shadow-card border-2 border-[#cfd9e6]">
               ⭐ เฉลยแล้ว <span className="tabular-nums">{answeredList.length}</span> / {total}
             </span>
           </div>
@@ -252,7 +252,7 @@ function FlashCardPage() {
               >
                 ←
               </button>
-              <span className="rounded-full bg-white px-5 py-2 font-extrabold shadow-card ring-1 ring-slate-100">
+              <span className="rounded-full bg-white px-5 py-2 font-extrabold shadow-card border-2 border-[#cfd9e6]">
                 {card.answer === 'yes' ? 'จริง' : 'เท็จ'} · ไปต่อ
               </span>
               <button
@@ -283,7 +283,7 @@ function FlashCardPage() {
           )}
         </div>
       </div>
-    </div>
+    </PageBlobs>
   )
 }
 

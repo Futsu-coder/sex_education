@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { groupSortItems, groups } from '../data/groupSort'
-import { Confetti } from '../components/ui'
+import { Confetti, PageBlobs } from '../components/ui'
 
 const GROUP_COLORS = ['#2563eb', '#0d9488', '#d97706', '#dc2626']
 const GROUP_SHADOWS = ['#1d4ed8', '#0f766e', '#b45309', '#b91c1c']
@@ -116,15 +116,15 @@ function GroupSortPage() {
   }
 
   return (
-    <div className="relative min-h-screen px-4 py-8">
+    <PageBlobs variant="groupsort">
       {showConfetti && <Confetti />}
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-4xl px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex animate-fade-up items-center justify-between">
           <Link to="/" className="text-lg font-bold hover:underline">
             ← จัดกลุ่มคำศัพท์
           </Link>
-          <span className="rounded-xl bg-white px-4 py-1.5 font-extrabold text-primary ring-1 ring-slate-100">
+          <span className="rounded-xl bg-white px-4 py-1.5 font-extrabold text-primary border-2 border-[#cfd9e6]">
             🧩 จัดแล้ว <span className="tabular-nums">{placedCount}</span> / {totalItems}
           </span>
         </div>
@@ -140,7 +140,7 @@ function GroupSortPage() {
 
         {/* Available items */}
         <div
-          className="mb-8 animate-fade-up rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-100"
+          className="mb-8 animate-fade-up rounded-3xl bg-white p-6 shadow-card border-2 border-[#cfd9e6]"
           style={{ animationDelay: '0.1s' }}
         >
           <h2 className="mb-4 text-sm font-extrabold uppercase tracking-wide text-primary">
@@ -183,18 +183,22 @@ function GroupSortPage() {
               key={groupName}
               onDragOver={(e) => handleDragOver(e, gi)}
               onDrop={(e) => handleDrop(e, gi)}
-              className={`rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-100 transition-all duration-200 ${
+              className={`rounded-3xl bg-white p-6 shadow-card border-2 border-[#cfd9e6] transition-all duration-200 ${
                 isChecked
                   ? ''
                   : dragOverGroup === gi
-                    ? 'scale-[1.02] ring-2 ring-primary'
+                    ? 'scale-[1.02] border-primary'
                     : ''
               }`}
               style={{
                 backgroundColor: '#fff',
-                border: isChecked
-                  ? `4px solid ${groupIsCorrect(gi) ? '#0d9488' : '#dc2626'}`
-                  : '4px solid transparent',
+                borderWidth: 4,
+                borderStyle: 'solid',
+                borderColor: isChecked
+                  ? groupIsCorrect(gi) ? '#0d9488' : '#dc2626'
+                  : dragOverGroup === gi
+                    ? '#2563eb'
+                    : '#cfd9e6',
               }}
             >
               <div className="mb-4 flex items-center gap-3">
@@ -209,7 +213,7 @@ function GroupSortPage() {
               </div>
 
               {/* Drop zone content */}
-              <div className="flex min-h-[40px] flex-wrap gap-2 rounded-xl bg-slate-50 p-2 ring-1 ring-slate-100">
+              <div className="flex min-h-[40px] flex-wrap gap-2 rounded-xl bg-slate-50 p-2 border border-slate-200">
                 {assigned[gi].length === 0 ? (
                   <span className="self-center px-1 text-sm text-muted">
                     วางที่นี่ หรือคลิก + ด้านล่าง
@@ -318,7 +322,7 @@ function GroupSortPage() {
       {/* Incorrect grouping overlay */}
       {showIncorrectOverlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-sm animate-pop rounded-3xl bg-white p-8 text-center shadow-card ring-1 ring-slate-100">
+          <div className="w-full max-w-sm animate-pop rounded-3xl bg-white p-8 text-center shadow-card border-2 border-[#cfd9e6]">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-danger text-3xl font-bold text-white animate-shake">
               ✕
             </div>
@@ -355,7 +359,7 @@ function GroupSortPage() {
       {/* Success feedback (non-blocking) */}
       {isChecked && allCorrect && (
         <div className="mt-8 animate-pop text-center">
-          <div className="inline-block rounded-2xl bg-white p-6 shadow-card ring-1 ring-slate-100">
+          <div className="inline-block rounded-2xl bg-white p-6 shadow-card border-2 border-[#cfd9e6]">
             <p className="text-2xl font-extrabold text-accent">
               🎉 จัดกลุ่มถูกต้องทั้งหมด!
             </p>
@@ -363,7 +367,7 @@ function GroupSortPage() {
           </div>
         </div>
       )}
-    </div>
+    </PageBlobs>
   )
 }
 

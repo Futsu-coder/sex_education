@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import ImageCarousel from '../components/ImageCarousel'
-import { GameButton, GameCard } from '../components/ui'
+import { GameButton, PageBlobs } from '../components/ui'
 
 const GAME_LINKS = ['/quiz', '/flashcard', '/groupsort']
 
@@ -55,18 +55,11 @@ function KnowledgePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Decorative soft shapes */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-[#2563eb]/[0.07] blur-2xl" />
-        <div className="absolute -right-24 top-1/3 h-80 w-80 rounded-full bg-[#0d9488]/[0.08] blur-2xl" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[#8b5cf6]/[0.06] blur-2xl" />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 sm:py-12">
+    <PageBlobs variant="home">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
         {/* Top bar */}
         <div className="mb-8 animate-fade-up text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm sm:text-base font-extrabold shadow-card ring-1 ring-slate-100">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm sm:text-base font-extrabold shadow-card border-2 border-[#cfd9e6]">
             <span className="text-lg">💊</span>
             <span className="bg-gradient-to-r from-[#2563eb] to-[#0d9488] bg-clip-text text-transparent">
               Prep ก่อนเสี่ยง · PEP หลังเสี่ยง
@@ -76,7 +69,7 @@ function KnowledgePage() {
 
         {/* Hero carousel */}
         <div
-          className="mb-8 animate-fade-up overflow-hidden rounded-3xl shadow-card ring-1 ring-slate-100"
+          className="mb-8 animate-fade-up overflow-hidden rounded-3xl shadow-card border-2 border-[#cfd9e6]"
           style={{ animationDelay: '0.1s' }}
         >
           <ImageCarousel images={CAROUSEL_IMAGES} />
@@ -107,7 +100,7 @@ function KnowledgePage() {
               style={{ animationDelay: `${0.3 + i * 0.12}s` }}
             >
               <div
-                className="h-full rounded-2xl bg-white p-6 text-center shadow-card transition-all duration-300 ring-1 ring-slate-100 group-hover:-translate-y-1.5 group-hover:shadow-lift group-hover:ring-slate-200"
+                className="h-full rounded-2xl bg-white p-6 text-center shadow-card transition-all duration-300 border-2 border-[#cfd9e6] group-hover:-translate-y-1.5 group-hover:shadow-lift group-hover:border-primary"
               >
                 <div
                   className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6"
@@ -129,7 +122,7 @@ function KnowledgePage() {
           ))}
         </div>
       </div>
-    </div>
+    </PageBlobs>
   )
 }
 

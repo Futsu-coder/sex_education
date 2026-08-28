@@ -17,6 +17,7 @@
   --color-surface-2: #eef4fb;
   --color-ink: #1f2937;          /* slate-800 */
   --color-muted: #6b7280;        /* slate-500 */
+  --color-line: #cfd9e6;         /* visible card border (slate-300 tinted) */
 
   --font-sans: 'Manrope', 'Prompt', 'Inter', system-ui, 'Segoe UI', Roboto,
     sans-serif;
@@ -33,6 +34,8 @@
   --animate-shake: shake 0.45s ease both;
   --animate-bounce-slow: bounce-slow 2.4s ease-in-out infinite;
   --animate-float: float 4s ease-in-out infinite;
+  --animate-float-y: float-y 7s ease-in-out infinite;
+  --animate-float-spin: float-spin 9s ease-in-out infinite;
   --animate-confetti: confetti 2.5s ease-out both;
 }
 
@@ -116,6 +119,33 @@
   }
 }
 
+@keyframes float-y {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-22px);
+  }
+}
+
+@keyframes float-spin {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(14px, -18px) rotate(12deg) scale(1.03);
+  }
+  50% {
+    transform: translate(-8px, -30px) rotate(-10deg) scale(1.05);
+  }
+  75% {
+    transform: translate(-18px, -8px) rotate(14deg) scale(1.03);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+}
+
 @keyframes confetti {
   0% {
     transform: translateY(-10%) rotate(0deg);
@@ -129,21 +159,113 @@
 
 body {
   margin: 0;
-  background-color: var(--color-surface);
-  background-image: radial-gradient(
-      1100px 520px at 8% -6%,
-      rgba(37, 99, 235, 0.14),
-      transparent 60%
-    ),
-    radial-gradient(
-      900px 480px at 100% 0%,
-      rgba(13, 148, 136, 0.12),
-      transparent 55%
-    ),
-    linear-gradient(180deg, var(--color-surface) 0%, #ffffff 100%);
-  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  background-color: var(--color-surface);
+  background-image:
+    radial-gradient(
+      1200px 600px at 6% -8%,
+      rgba(37, 99, 235, 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      1000px 560px at 100% 4%,
+      rgba(13, 148, 136, 0.14),
+      transparent 58%
+    ),
+    linear-gradient(180deg, var(--color-surface) 0%, #ffffff 100%);
+  background-attachment: fixed;
+}
+
+/* ---- Animated drifting blobs (distributed across screen) ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      420px 420px at 12% 22%,
+      rgba(124, 58, 237, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      520px 520px at 82% 12%,
+      rgba(37, 99, 235, 0.12),
+      transparent 72%
+    ),
+    radial-gradient(
+      460px 460px at 92% 78%,
+      rgba(13, 148, 136, 0.11),
+      transparent 72%
+    ),
+    radial-gradient(
+      400px 400px at 8% 88%,
+      rgba(37, 99, 235, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      360px 360px at 50% 100%,
+      rgba(124, 58, 237, 0.08),
+      transparent 70%
+    );
+  animation: bg-drift 26s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+/* ---- Dot / grid pattern + fine noise overlay ---- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+  background-color: transparent;
+  background-image:
+    radial-gradient(rgba(31, 41, 55, 0.055) 1px, transparent 1.4px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 26px 26px, 300px 300px;
+}
+
+@keyframes bg-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(2%, -3%, 0) scale(1.08);
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+  .floating-element {
+    animation: none !important;
+  }
+}
+
+/* Visible card border — clearer outline on white cards */
+.card {
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-card);
+  border: 2px solid var(--color-line);
+  border-radius: 1rem;
+}
+.card-hover {
+  transition: all 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lift);
 }

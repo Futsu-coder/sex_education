@@ -72,7 +72,7 @@ export function GameButton({
       className={`relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-extrabold text-lg tracking-wide transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.98] ${
         isSolid
           ? 'text-white'
-          : 'bg-white text-primary ring-1 ring-slate-200 hover:ring-primary'
+          : 'bg-white text-primary border-2 border-line hover:border-primary'
       } ${className}`}
       style={isSolid ? { backgroundColor: color } : undefined}
     >
@@ -84,7 +84,7 @@ export function GameButton({
 export function GameCard({ children, color = '#ffffff', className = '' }) {
   return (
     <div
-      className={`rounded-2xl ${className}`}
+      className={`rounded-2xl border-2 border-line ${className}`}
       style={{ backgroundColor: color, boxShadow: 'var(--shadow-card)' }}
     >
       {children}
@@ -168,6 +168,91 @@ export function Confetti({ count = 60 }) {
           }}
         />
       ))}
+    </div>
+  )
+}
+
+const PAGE_BLOB_VARIANTS = {
+  home: [
+    { color: '124, 58, 237', pos: '-left-24 top-10', size: 'h-72 w-72' },
+    { color: '13, 148, 136', pos: '-right-24 top-1/3', size: 'h-80 w-80' },
+    { color: '124, 58, 237', pos: 'bottom-0 left-1/3', size: 'h-64 w-64' },
+  ],
+  quiz: [
+    { color: '37, 99, 235', pos: '-left-20 top-1/4', size: 'h-80 w-80' },
+    { color: '37, 99, 235', pos: '-right-20 bottom-10', size: 'h-72 w-72' },
+  ],
+  flashcard: [
+    { color: '13, 148, 136', pos: '-left-20 top-24', size: 'h-80 w-80' },
+    { color: '13, 148, 136', pos: '-right-24 top-1/2', size: 'h-72 w-72' },
+  ],
+  groupsort: [
+    { color: '217, 119, 6', pos: '-left-24 top-10', size: 'h-80 w-80' },
+    { color: '37, 99, 235', pos: '-right-24 top-1/3', size: 'h-72 w-72' },
+    { color: '217, 119, 6', pos: 'bottom-0 left-1/2', size: 'h-64 w-64' },
+  ],
+}
+
+export function PageBlobs({ variant = 'home', children }) {
+  const blobs = PAGE_BLOB_VARIANTS[variant] || PAGE_BLOB_VARIANTS.home
+  return (
+    <div className="relative min-h-screen overflow-hidden">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        {blobs.map((b, i) => (
+          <div
+            key={i}
+            className={`absolute ${b.pos} ${b.size} rounded-full blur-3xl`}
+            style={{ backgroundColor: `rgba(${b.color}, 0.10)` }}
+          />
+        ))}
+      </div>
+      <FloatingElements variant={variant} />
+      <div className="relative z-10">{children}</div>
+    </div>
+  )
+}
+
+const FLOAT_SETS = {
+  home: ['💊', '💊', '🔬', '⭐', '🧬', '❤️'],
+  quiz: ['💊', '⭐', '💡'],
+  flashcard: ['🃏', '💊', '💡'],
+  groupsort: ['🧩', '💊', '⭐'],
+}
+
+const FLOAT_POS = [
+  { left: '4%', top: '12%', size: 'text-6xl', opacity: 0.12, dur: 18, delay: 0 },
+  { left: '88%', top: '16%', size: 'text-5xl', opacity: 0.16, dur: 22, delay: 2.4 },
+  { left: '7%', top: '68%', size: 'text-5xl', opacity: 0.15, dur: 20, delay: 4.8 },
+  { left: '84%', top: '72%', size: 'text-6xl', opacity: 0.12, dur: 24, delay: 1.2 },
+  { left: '18%', top: '88%', size: 'text-4xl', opacity: 0.18, dur: 16, delay: 3.6 },
+  { left: '78%', top: '40%', size: 'text-4xl', opacity: 0.16, dur: 20, delay: 6.0 },
+]
+
+export function FloatingElements({ variant = 'home' }) {
+  const set = FLOAT_SETS[variant] || FLOAT_SETS.home
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 hidden overflow-hidden lg:block"
+    >
+      {set.map((emoji, i) => {
+        const pos = FLOAT_POS[i % FLOAT_POS.length]
+        return (
+          <span
+            key={i}
+            className={`floating-element absolute ${pos.size} leading-none select-none animate-float-spin`}
+            style={{
+              left: pos.left,
+              top: pos.top,
+              opacity: pos.opacity,
+              animationDuration: `${pos.dur}s`,
+              animationDelay: `${pos.delay}s`,
+            }}
+          >
+            {emoji}
+          </span>
+        )
+      })}
     </div>
   )
 }
