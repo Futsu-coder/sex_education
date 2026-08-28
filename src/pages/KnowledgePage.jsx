@@ -50,12 +50,12 @@ function KnowledgePage() {
             >
               แบบทดสอบ 4 ตัวเลือก
             </Link>
-            {/* <Link
+            <Link
               to="/flashcard"
               className="inline-block bg-white text-primary border-2 border-primary text-lg font-medium px-8 py-4 rounded-xl transition-all duration-150 ease-in-out hover:bg-primary/5"
             >
               Flash Card
-            </Link> */}
+            </Link>
             <Link
               to="/groupsort"
               className="inline-block bg-white text-primary border-2 border-primary text-lg font-medium px-8 py-4 rounded-xl transition-all duration-150 ease-in-out hover:bg-primary/5"
