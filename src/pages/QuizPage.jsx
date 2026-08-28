@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import questions from '../data/questions'
+import { AnimatedNumber, Confetti } from '../components/ui'
 
-const OPTION_COLORS = ['#e21b3c', '#1368ce', '#d89e00', '#26890c']
+const OPTION_COLORS = ['#dc2626', '#2563eb', '#d97706', '#0d9488']
 
 function QuizPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -10,6 +11,8 @@ function QuizPage() {
   const [showScore, setShowScore] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [locked, setLocked] = useState(false)
+  const [feedback, setFeedback] = useState(null)
+  const [showConfetti, setShowConfetti] = useState(false)
 
   const totalQuestions = questions.length
   const question = questions[currentQuestion]
@@ -20,6 +23,7 @@ function QuizPage() {
     const isCorrect = question.answerOptions[index].isCorrect
     setSelectedAnswer(index)
     setLocked(true)
+    setFeedback(isCorrect ? 'correct' : 'wrong')
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1)
@@ -31,10 +35,13 @@ function QuizPage() {
         setCurrentQuestion(nextQuestion)
       } else {
         setShowScore(true)
+        setShowConfetti(true)
+        setTimeout(() => setShowConfetti(false), 4000)
       }
       setSelectedAnswer(null)
       setLocked(false)
-    }, 1000)
+      setFeedback(null)
+    }, 1100)
   }
 
   const restartQuiz = () => {
@@ -43,31 +50,43 @@ function QuizPage() {
     setShowScore(false)
     setSelectedAnswer(null)
     setLocked(false)
+    setFeedback(null)
+    setShowConfetti(false)
   }
 
   if (showScore) {
+    const isPerfect = score === totalQuestions
+    const isPass = score >= totalQuestions / 2
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md text-center">
+      <div className="relative flex min-h-screen items-center justify-center px-4 py-8">
+        {showConfetti && <Confetti />}
+        <div className="w-full max-w-md animate-fade-up text-center">
           <div
-            className="rounded-3xl bg-white p-8 relative"
-            style={{ boxShadow: '0 8px 0 rgba(0,0,0,0.2)' }}
+            className="relative rounded-3xl bg-white p-8 shadow-card ring-1 ring-slate-100"
           >
-            <span className="text-6xl mb-4 block">
-              {score === totalQuestions
-                ? '🏆'
-                : score >= totalQuestions / 2
-                  ? '🎉'
-                  : '💪'}
+            <span
+              className="mx-auto mb-4 block w-20 h-20 rounded-full flex items-center justify-center text-5xl animate-pop"
+              style={{
+                backgroundColor: isPerfect
+                  ? '#dbeafe'
+                  : isPass
+                    ? '#ccfbf1'
+                    : '#fee2e2',
+              }}
+            >
+              {isPerfect ? '🏆' : isPass ? '🎉' : '💪'}
             </span>
-            <h2 className="text-3xl font-extrabold mb-2">เสร็จแล้ว!</h2>
-            <div className="inline-flex items-center gap-2 bg-[#d89e00] text-white text-2xl font-extrabold px-6 py-2 rounded-xl mb-4">
-              ⭐ {score} / {totalQuestions}
+            <h2 className="mb-2 text-3xl font-extrabold">เสร็จแล้ว!</h2>
+            <div
+              className="mx-auto mb-4 inline-flex items-center gap-2 rounded-xl px-6 py-2 text-2xl font-extrabold text-white"
+              style={{ backgroundColor: isPass ? '#0d9488' : '#d97706' }}
+            >
+              <AnimatedNumber value={score} className="tabular-nums" /> / {totalQuestions}
             </div>
-            <p className="text-lg mb-8">
-              {score === totalQuestions
+            <p className="mb-8 text-lg text-muted">
+              {isPerfect
                 ? 'ยอดเยี่ยม! คุณเก่งมาก 🏆'
-                : score >= totalQuestions / 2
+                : isPass
                   ? 'ไม่เลวเลย ลองอีกรอบได้!'
                   : 'ลองอ่านเนื้อหาแล้วกลับมาลองใหม่นะ'}
             </p>
@@ -75,14 +94,13 @@ function QuizPage() {
               <button
                 type="button"
                 onClick={restartQuiz}
-                className="w-full px-6 py-4 rounded-2xl text-white font-extrabold text-lg transition-all active:translate-y-1 active:shadow-none"
-                style={{ backgroundColor: '#1368ce', boxShadow: '0 5px 0 #0d4a99' }}
+                className="w-full rounded-xl bg-primary px-6 py-4 text-lg font-extrabold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.98]"
               >
                 🔄 เล่นอีกครั้ง
               </button>
               <Link
                 to="/"
-                className="w-full px-6 py-4 rounded-2xl text-[#1368ce] font-extrabold text-lg bg-white transition-all active:translate-y-1 active:shadow-none border-2 border-[#1368ce]"
+                className="w-full rounded-xl bg-white px-6 py-4 text-lg font-extrabold text-primary ring-1 ring-slate-200 transition-all duration-200 hover:ring-primary active:scale-[0.98]"
               >
                 ← กลับหน้าแรก
               </Link>
@@ -94,34 +112,33 @@ function QuizPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+    <div className="relative flex min-h-screen items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl">
         {/* Header bar */}
-        <div className="flex items-center justify-between mb-4">
-          <Link to="/" className="text-white font-bold hover:underline">
+        <div className="mb-4 flex animate-fade-up items-center justify-between">
+          <Link to="/" className="font-bold hover:underline">
             ← เกมตอบคำถาม
           </Link>
-          <span className="text-white font-extrabold">
-            คะแนน: {score}
+          <span className="font-extrabold">
+            คะแนน: <span className="tabular-nums">{score}</span>
           </span>
         </div>
 
-        <div
-          className="rounded-3xl bg-white p-6 sm:p-8 relative"
-          style={{ boxShadow: '0 8px 0 rgba(0,0,0,0.2)' }}
-        >
+        <div className="animate-fade-up rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-100 sm:p-8">
           {/* Progress */}
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-extrabold text-[#1368ce]">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-extrabold text-primary">
               คำถามที่ {currentQuestion + 1} / {totalQuestions}
             </h2>
-            <span className="bg-[#1368ce] text-white font-extrabold px-3 py-1 rounded-lg">
+            <span
+              className="rounded-lg bg-primary px-3 py-1 font-extrabold text-white"
+            >
               +{score} ⭐
             </span>
           </div>
-          <div className="h-5 bg-white rounded-full mb-7 overflow-hidden" style={{ boxShadow: 'inset 0 2px 0 rgba(0,0,0,0.12)' }}>
+          <div className="mb-7 h-2.5 overflow-hidden rounded-full bg-slate-100">
             <div
-              className="h-full transition-all duration-300"
+              className="h-full rounded-full transition-all duration-500"
               style={{
                 width: `${((currentQuestion + 1) / totalQuestions) * 100}%`,
                 backgroundColor: questionColor(currentQuestion),
@@ -130,16 +147,21 @@ function QuizPage() {
           </div>
 
           {/* Question */}
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-center mb-8 leading-snug">
+          <h3
+            key={currentQuestion}
+            className="mb-8 animate-fade-up text-center text-2xl font-extrabold leading-snug sm:text-3xl"
+          >
             {question.questionText}
           </h3>
 
-          {/* Options : Kahoot 2x2 colored */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {/* Options */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {question.answerOptions.map((option, index) => {
               const isCorrectOption = option.isCorrect
               const isSelected = index === selectedAnswer
               const showResult = locked
+              const isCorrectPick = showResult && isCorrectOption
+              const isWrongPick = showResult && isSelected && !isCorrectOption
               const base = OPTION_COLORS[index]
               return (
                 <button
@@ -147,34 +169,47 @@ function QuizPage() {
                   type="button"
                   onClick={() => handleAnswerClick(index)}
                   disabled={locked}
-                  className={`relative flex items-center gap-4 text-left px-5 py-4 sm:py-5 rounded-2xl text-white font-bold text-lg transition-all duration-100 ${
-                    showResult
-                      ? isCorrectOption
-                        ? ''
-                        : isSelected
+                  className={`relative flex items-center gap-4 rounded-2xl px-5 py-4 text-left text-lg font-bold text-white transition-all duration-200 sm:py-5 ${
+                    isCorrectPick
+                      ? 'animate-pop ring-4 ring-green-400/40'
+                      : isWrongPick
+                        ? 'animate-shake'
+                        : showResult
                           ? 'opacity-40'
-                          : 'opacity-40'
-                      : ''
-                  } active:translate-y-1 active:shadow-none`}
+                          : 'hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.98]'
+                  }`}
                   style={{
                     backgroundColor: base,
-                    boxShadow: `0 6px 0 ${shade(base, -20)}`,
+                    boxShadow: `0 4px 0 ${shade(base, -20)}`,
                   }}
                 >
-                  <span className="w-9 h-9 shrink-0 bg-white/25 rounded-lg flex items-center justify-center text-xl font-extrabold">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/25 text-xl font-extrabold">
                     {['1', '2', '3', '4'][index]}
                   </span>
                   {option.answerText}
-                  {showResult && isCorrectOption && (
-                    <span className="ml-auto text-2xl">✅</span>
-                  )}
-                  {showResult && isSelected && !isCorrectOption && (
-                    <span className="ml-auto text-2xl">❌</span>
-                  )}
+                  {isCorrectPick && <span className="ml-auto text-2xl">✅</span>}
+                  {isWrongPick && <span className="ml-auto text-2xl">❌</span>}
                 </button>
               )
             })}
           </div>
+        </div>
+
+        {/* Feedback bar */}
+        <div key={feedback} className="mt-5 flex justify-center">
+          {locked && (
+            <span
+              className={`inline-flex items-center gap-2 rounded-full px-6 py-2.5 font-extrabold animate-pop ${
+                feedback === 'correct'
+                  ? 'bg-accent-light text-accent'
+                  : feedback === 'wrong'
+                    ? 'bg-danger-light text-danger'
+                    : ''
+              }`}
+            >
+              {feedback === 'correct' ? '✅ ถูกต้อง!' : feedback === 'wrong' ? '❌ ยังไม่ถูก' : ''}
+            </span>
+          )}
         </div>
       </div>
     </div>

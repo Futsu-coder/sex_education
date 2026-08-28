@@ -1,55 +1,107 @@
 # Frontend Design Document: Knowledge & Quiz App
 
 ## 1. Design Concept & Theme
-- **Style:** Clean, modern, minimalist, and educational.
-- **Focus:** High readability on the Knowledge Page and engaging, immediate feedback on the Quiz Page.
-- **Approach:** Mobile-first responsive design.
+- **Style:** Clean, modern, minimalist, and **professional/trustworthy** (เหมาะกับเนื้อหาเชิงสุขภาพ).
+- **Focus:** High readability on the Knowledge Page and engaging, immediate feedback on all interactive pages (Quiz / FlashCard / GroupSort).
+- **Approach:** Mobile-first responsive design (Tailwind breakpoints `sm:`, `md:`).
+- **Direction:** เปลี่ยนจากธีมเดิม (สีม่วงสด Kahoot-style) มาเป็นธีมสะอาดโทนฟ้า/ขาว พร้อม animation เต็มรูปแบบ (`fade-up`, `pop`, `shake`, `confetti`, `bounce`).
 
-## 2. Color Palette (Recommended)
-Using a soft and modern palette to reduce eye strain while keeping interactive elements prominent.
-- **Primary Color:** `#3B82F6` (Blue) - Used for primary buttons, links, and main headers.
-- **Success Color:** `#10B981` (Green) - Used for correct answers in the quiz.
-- **Error/Danger Color:** `#EF4444` (Red) - Used for incorrect answers.
-- **Background Color:** `#F8FAFC` (Light Slate) - Soft background for the entire app.
-- **Card Background:** `#FFFFFF` (White) - For content containers and quiz cards to make them pop.
-- **Text Primary:** `#1E293B` (Dark Slate) - For headings and main text.
-- **Text Secondary:** `#64748B` (Muted Slate) - For sub-text or secondary information.
+## 2. Theme Configuration & Color Palette
+ธีมตั้งค่าผ่าน **Tailwind CSS v4 `@theme`** ในไฟล์ `src/index.css` (ไม่มี `tailwind.config.js`)
+
+| Token | ค่า | ใช้ |
+|---|---|---|
+| `primary` | `#2563eb` (blue-600) | ปุ่มหลัก, ลิงก์, header |
+| `primary-dark` | `#1d4ed8` | เงา/สถานะกด |
+| `primary-light` | `#dbeafe` | พื้นหลัง badge/soft accent |
+| `accent` | `#0d9488` (teal-600) | ความสำเร็จ/ถูกต้อง |
+| `accent-light` | `#ccfbf1` | พื้นหลัง feedback ถูก |
+| `danger` | `#dc2626` (red-600) | ผิดพลาด |
+| `danger-light` | `#fee2e2` | พื้นหลัง feedback ผิด |
+| `warning` | `#d97706` (amber-600) | เตือน |
+| `warning-light` | `#fef3c7` | พื้นหลังเตือน |
+| `card` | `#ffffff` | กล่องเนื้อหา |
+| `surface` | `#f6f9fe` | พื้นหลังหลัก (ฟ้าอ่อน) |
+| `ink` | `#1f2937` | ข้อความหลัก |
+| `muted` | `#6b7280` | ข้อความรอง |
+| `shadow-soft` | soft blue glow | เงาปุ่ม/ลอย |
+| `shadow-card` | soft slate | เงาการ์ด |
+| `shadow-lift` | strong blue glow | เงาตอน hover ลอย |
+
+**พื้นหลัง body:** ไล่เฉดฟ้าอ่อน + radial gradient blobs (blue/teal/purple opacity ต่ำ) เพื่อให้ลึกลงแต่คงความสะอาด
 
 ## 3. Typography
-- **Font Family:** `Prompt` (for Thai support) or `Inter` (for clean English UI).
+- **Font Family:** `Manrope` (UI สะอาด เป็นทางการ) + `Prompt` (สำหรับภาษาไทย) ตั้งไว้ใน `index.html` และ `--font-sans`
 - **Scale:**
-  - `h1`: 2.5rem (bold) - Main Page Titles
-  - `h2`: 1.75rem (semibold) - Section Headers
-  - `body`: 1rem (regular) - Content and Questions
-  - `button`: 1rem (medium) - Clear and legible button text
+  - Heading: `font-extrabold`, ขนาดตามบริบท (`text-2xl`–`text-4xl`)
+  - Body: `text-base`–`text-lg` regular
+  - Button: `text-lg` extrabold, `tracking-wide`
 
 ## 4. Layout & Structure
 
-### 4.1 Knowledge Page (`/`)
-- **Container:** Centered max-width container (e.g., `max-w-3xl`) for optimal reading length.
-- **Header:** Catchy title with a brief introductory subtitle.
-- **Content:** Well-spaced paragraphs (`line-height: 1.6`) with bullet points or images if necessary.
-- **CTA (Call to Action):** A large, centered "Start Quiz" button at the very bottom.
-  - *Interaction:* Hover effect (slight scale up or shadow increase) to encourage clicking.
+### 4.1 Knowledge Page (`/`) — `KnowledgePage.jsx`
+- **Container:** `max-w-4xl` centered.
+- **Top bar:** ข้อความหัวข้อใน pill สีขาว + gradient text (blue→teal), เป็นทางการ.
+- **Hero carousel** (`ImageCarousel`): รูปเลื่อนพร้อมลูกศร white soft shadow + dots animation (teal เมื่อ active เป็น bar).
+- **CTA:** ปุ่ม "เริ่มทำแบบทดสอบ" `accent` ใหญ่กลางหน้า พร้อม rocket `bounce-slow`.
+- **Feature cards** (3 ใบ → Quiz / FlashCard / GroupSort):
+  - แต่ละใบมี icon ในกล่อง soft color, title สี accent เฉพาะ, progress bar ที่ไหลเต็มเมื่อ hover.
+  - **Animation:** เข้าหน้าแบบ **stagger fade-up** ทีละใบ, icon โบก (bounce), hover เงยขึ้น + shadow-lift + ring เปลี่ยน + progress bar เต็ม.
 
-### 4.2 Quiz Page (`/quiz`)
-- **Layout:** Centered card interface in the middle of the screen.
-- **Header:** Progress indicator (e.g., "Question 1 / 5").
-- **Question Area:** Large, easily readable question text.
-- **Options Area:** 
-  - Desktop/Tablet: 2x2 Grid.
-  - Mobile: Stacked vertically (1 column).
-- **Option Buttons States:**
-  - *Default:* White background, subtle border, left-aligned text.
-  - *Hover:* Light blue tint or border highlight.
-  - *Correct Answer:* Green background, white text.
-  - *Incorrect Answer:* Red background, white text.
-- **Result Screen:** Shows final score prominently (e.g., a large circle with "4/5"). Includes "Restart" and "Read Again" buttons.
+### 4.2 Quiz Page (`/quiz`) — `QuizPage.jsx`
+- **Layout:** Card กลางจอ `max-w-2xl`.
+- **Header:** ลิงก์กลับ + คะแนนตัวเลข.
+- **Progress bar:** แบบบาง (`h-2.5`), สีเปลี่ยนตามคำถาม, width animated.
+- **Options (2x2 grid / 1 col mobile):** สี 4 สีใหม่
+  - Red `#dc2626` / Blue `#2563eb` / Amber `#d97706` / Teal `#0d9488`.
+- **Option states:**
+  - *Default:* สีพื้น + shadow เล็ก, hover เงยขึ้น + shadow-lift.
+  - *Correct pick:* `animate-pop` + ring เขียว + ✅.
+  - *Wrong pick:* `animate-shake` + ❌ + ตัวอื่น dim (opacity-40).
+- **Feedback bar:** badge pop ใต้ตัวเลือก แสดง "ถูกต้อง!" (เขียว light) / "ยังไม่ถูก" (แดง light).
+- **Result screen:** icon ขนาดใหญ่ pop ตามผล (🏆/🎉/💪), คะแนนแสดงผ่าน `AnimatedNumber` (นับขึ้น), ปุ่ม "เล่นอีกครั้ง" / "กลับหน้าแรก", ฉลองด้วย **Confetti**.
+
+### 4.3 Flash Card Page (`/flashcard`) — `FlashCardPage.jsx`
+- **Layout:** การ์ดพลิก 3D (`perspective`, `preserve-3d`, `backface-visibility`) กลางจอ `max-w-lg`.
+- **Front:** ข้อความ statement บนการ์ดขาว / **Back:** คำเฉลยพื้น primary blue.
+- **ปุ่ม จริง/เท็จ:**
+  - *Default:* white + ring, hover# เงยขึ้น.
+  - *ถูก:* `animate-pop` + bg-accent + ring เขียว.
+  - *ผิด:* `animate-shake` + red light.
+- **Animation:** ทั้งหน้าจะ `fade-up` ตอนเข้า, ปุ่มควบคุม (ก่อน/ถัดไป) fade-up ตอนสลับการ์ด, ตอบครบทุกใบ → **Confetti**.
+
+### 4.4 Group Sort Page (`/groupsort`) — `GroupSortPage.jsx`
+- **Layout:** `max-w-4xl`, ช่องคำศัพท์ที่ต้องจัด + ตารางกลุ่ม.
+- **สี Dropdown:** Blue `#2563eb` / Teal `#0d9488` / Amber `#d97706` / Red `#dc2626`.
+- **Drag & Drop:**
+  - ขณะลาก item: เอียง `-rotate-3` + scale + shadow-lift ลอย.
+  - Drop zone เจอ: `scale-[1.02]` + ring-2 primary highlight.
+  - วางสำเร็จ: item `animate-pop-in`.
+- **ตรวจคำตอบ:** ถูกทั้งหมด → green border + **Confetti** + กล่อง success pop; ผิด → แดง border + overlay `animate-shake` + ✕.
 
 ## 5. Animations & Transitions
-- **Hover effects:** 150ms ease-in-out for buttons (color and subtle shadow).
-- **Page transitions:** (Optional) Fade-in when switching between Knowledge and Quiz pages to avoid abrupt flashes.
-- **Quiz feedback:** Slight delay (e.g., 1000ms) after choosing an answer before moving to the next question so the user can see if they were right or wrong.
+กำหนด keyframes ใน `src/index.css` และสร้างเป็น Tailwind utilities ผ่าน `@theme --animate-*`:
 
-## 6. Suggested CSS Framework
-- **Tailwind CSS** is highly recommended. It perfectly matches this design spec and allows for rapid styling without writing custom CSS files for every component.
+| Utility | Effect |
+|---|---|
+| `animate-fade-up` | เข้าหน้า/เปลี่ยนองค์ประกอบ (slide + fade) |
+| `animate-fade-in` | fade อย่างเดียว |
+| `animate-pop` / `animate-pop-in` | ปรากฏแบบเด้ง (ถูกต้อง / เข้าตำแหน่ง / overlay) |
+| `animate-shake` | สั่น (ตอบผิด) |
+| `animate-bounce-slow` | ไอคอนโบก |
+| `animate-float` | วัตถุลอยแบบเนียน |
+| `animate-confetti` | โปรยกระดาษฉลอง |
+
+- **Hover/active transitions:** `duration-200`, `hover:-translate-y-0.5`, `hover:shadow-lift`, `active:scale-[0.98]`.
+- **Feedback delay:** ตัวเลือก quiz หน่วง 1100ms, flashcard 500ms ก่อนพลิก เพื่อให้เห็นถูก/ผิด.
+- **Confetti:** ปกติแสดง 60 ชิ้น เป็นเวลา 4 วินาที, ใช้ใน Quiz จบเกม, FlashCard ครบ, GroupSort ตรวจถูก.
+
+## 6. Reusable Components (`src/components/ui.jsx`)
+- **`GameButton`** — ปุ่ม solid/outline ขอบมน, hoc เงยขึ้น, `variant="outline"` รองรับ.
+- **`GameCard`** — กล่องขาว soft shadow.
+- **`Shape`** — SVG ตกแต่งพื้นหลัง.
+- **`AnimatedNumber`** — ตัวเลขนับขึ้นด้วย easing (ใช้กับคะแนน).
+- **`Confetti`** — component โปรยกระดาษแบบ fixed overlay, กำหนดสี/ขนาดสุ่ม.
+
+## 7. Suggested CSS Framework
+- **Tailwind CSS v4** ผ่าน `@tailwindcss/vite` (ใน `vite.config.js`) — config ผ่าน `@theme` ใน `src/index.css` ไม่ต้องใช้ PostCSS/config file.

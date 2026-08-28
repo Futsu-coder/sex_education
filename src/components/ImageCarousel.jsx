@@ -25,8 +25,8 @@ function ImageCarousel({ images, interval = 4000 }) {
   }, [paused, interval, next, total])
 
   const arrowClass =
-    'absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white text-ink flex items-center justify-center transition-all active:translate-y-[calc(-50%+2px)] active:shadow-none'
-  const arrowShadow = { boxShadow: '0 4px 0 rgba(0,0,0,0.25)' }
+    'absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white text-ink flex items-center justify-center shadow-card transition-all hover:scale-110 active:scale-95'
+  const arrowShadow = {} /* soft shadow via shadow-card */
 
   return (
     <div
@@ -91,15 +91,15 @@ function ImageCarousel({ images, interval = 4000 }) {
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-black/30">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-black/30 p-1.5">
           {images.map((_, i) => (
             <button
               key={i}
               type="button"
               onClick={() => goTo(i)}
               aria-label={`ไปรูปที่ ${i + 1}`}
-              className={`h-3 rounded-full transition-all duration-300 ${
-                i === current ? 'w-7 bg-[#d89e00]' : 'w-3 bg-white/70 hover:bg-white'
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                i === current ? 'w-7 bg-[#0d9488]' : 'w-2.5 bg-white/70 hover:bg-white'
               }`}
             />
           ))}

@@ -1,6 +1,8 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+
 export function Shape({
   type = 'circle',
-  color = '#ffffff',
+  color = '#2563eb',
   className = '',
   opacity = 1,
   zIndex = 0,
@@ -33,7 +35,7 @@ export function Shape({
   }
 
   if (type === 'square') {
-    return <div className={`${base} rounded-lg`} style={{ ...style, background: color }} />
+    return <div className={`${base} rounded-2xl`} style={{ ...style, background: color }} />
   }
 
   if (type === 'semicircle') {
@@ -58,18 +60,21 @@ export function Shape({
 export function GameButton({
   children,
   className = '',
-  color = '#1368ce',
+  color = '#2563eb',
+  variant = 'solid',
   ...props
 }) {
+  const isSolid = variant === 'solid'
   return (
     <button
       type="button"
       {...props}
-      className={`relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-extrabold text-lg uppercase tracking-wide transition-all duration-100 active:translate-y-1 active:shadow-none ${className}`}
-      style={{
-        backgroundColor: color,
-        boxShadow: `0 6px 0 ${shade(color, -18)}`,
-      }}
+      className={`relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-extrabold text-lg tracking-wide transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.98] ${
+        isSolid
+          ? 'text-white'
+          : 'bg-white text-primary ring-1 ring-slate-200 hover:ring-primary'
+      } ${className}`}
+      style={isSolid ? { backgroundColor: color } : undefined}
     >
       {children}
     </button>
@@ -80,22 +85,89 @@ export function GameCard({ children, color = '#ffffff', className = '' }) {
   return (
     <div
       className={`rounded-2xl ${className}`}
-      style={{ backgroundColor: color, boxShadow: '0 6px 0 rgba(0,0,0,0.18)' }}
+      style={{ backgroundColor: color, boxShadow: 'var(--shadow-card)' }}
     >
       {children}
     </div>
   )
 }
 
-function shade(hex, amt) {
-  const clean = hex.replace('#', '')
-  const num = parseInt(clean, 16)
-  const r = clamp(((num >> 16) & 0xff) + amt)
-  const g = clamp(((num >> 8) & 0xff) + amt)
-  const b = clamp((num & 0xff) + amt)
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
+export function AnimatedNumber({
+  value,
+  duration = 800,
+  className = '',
+  ...props
+}) {
+  const [display, setDisplay] = useState(0)
+  const startRef = useRef(null)
+  const fromRef = useRef(value)
+
+  useEffect(() => {
+    const from = fromRef.current
+    const change = value - from
+    if (change === 0) {
+      setDisplay(value)
+      return
+    }
+
+    const update = (ts) => {
+      if (startRef.current === null) startRef.current = ts
+      const p = Math.min((ts - startRef.current) / duration, 1)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setDisplay(Math.round(from + change * eased))
+      if (p < 1) requestAnimationFrame(update)
+      else fromRef.current = value
+    }
+    requestAnimationFrame(update)
+    return () => {}
+  }, [value, duration])
+
+  return (
+    <span className={className} {...props}>
+      {display}
+    </span>
+  )
 }
 
-function clamp(v) {
-  return Math.max(0, Math.min(255, v))
+const CONFETTI_COLORS = ['#2563eb', '#0d9488', '#f59e0b', '#dc2626', '#8b5cf6', '#ec4899']
+
+export function Confetti({ count = 60 }) {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: count }).map(() => {
+        const size = 6 + Math.random() * 8
+        return {
+          left: `${Math.random() * 100}%`,
+          width: size,
+          height: size * (1 + Math.random()),
+          color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+          delay: `${Math.random() * 0.7}s`,
+          duration: `${2 + Math.random() * 1.6}s`,
+          rotate: `${Math.random() * 360}deg`,
+        }
+      }),
+    [count],
+  )
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-[60] overflow-hidden" aria-hidden="true">
+      {pieces.map((p, i) => (
+        <span
+          key={i}
+          className="absolute top-0 animate-confetti"
+          style={{
+            left: p.left,
+            width: p.width,
+            height: p.height,
+            backgroundColor: p.color,
+            borderRadius: '2px',
+            transform: `rotate(${p.rotate})`,
+            transformOrigin: 'center',
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+          }}
+        />
+      ))}
+    </div>
+  )
 }

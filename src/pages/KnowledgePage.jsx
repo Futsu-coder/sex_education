@@ -18,22 +18,31 @@ const FEATURES = [
     icon: '🎯',
     title: 'เกมตอบคำถาม',
     desc: 'ทดสอบความรู้ พร้อมคะแนนสะสม',
+    mode: 'quiz',
     to: '/quiz',
-    color: '#e21b3c',
+    accent: '#2563eb',
+    soft: '#dbeafe',
+    progress: 'bg-[#2563eb]',
   },
   {
     icon: '🃏',
     title: 'Flash Card',
     desc: 'จริง/เท็จ พลิกดูเฉลย',
+    mode: 'flashcard',
     to: '/flashcard',
-    color: '#d89e00',
+    accent: '#0d9488',
+    soft: '#ccfbf1',
+    progress: 'bg-[#0d9488]',
   },
   {
     icon: '🧩',
     title: 'จัดกลุ่มคำศัพท์',
     desc: 'ลากคำศัพท์ไปให้ถูกหมวด',
+    mode: 'groupsort',
     to: '/groupsort',
-    color: '#26890c',
+    accent: '#d97706',
+    soft: '#fef3c7',
+    progress: 'bg-[#d97706]',
   },
 ]
 
@@ -46,45 +55,75 @@ function KnowledgePage() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Decorative soft shapes */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-[#2563eb]/[0.07] blur-2xl" />
+        <div className="absolute -right-24 top-1/3 h-80 w-80 rounded-full bg-[#0d9488]/[0.08] blur-2xl" />
+        <div className="absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-[#8b5cf6]/[0.06] blur-2xl" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 sm:py-12">
         {/* Top bar */}
-        <div className="flex items-center justify-center mb-8">
-          <GameCard color="#ffffff" className="px-6 py-2">
-            <span className="text-xl font-extrabold text-[#1368ce]">💊 Prep ก่อนเสี่ยง · PEP หลังเสี่ยง</span>
-          </GameCard>
+        <div className="mb-8 animate-fade-up text-center">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm sm:text-base font-extrabold shadow-card ring-1 ring-slate-100">
+            <span className="text-lg">💊</span>
+            <span className="bg-gradient-to-r from-[#2563eb] to-[#0d9488] bg-clip-text text-transparent">
+              Prep ก่อนเสี่ยง · PEP หลังเสี่ยง
+            </span>
+          </span>
         </div>
 
         {/* Hero carousel */}
-        <div className="rounded-3xl overflow-hidden mb-8 border-4 border-white">
+        <div
+          className="mb-8 animate-fade-up overflow-hidden rounded-3xl shadow-card ring-1 ring-slate-100"
+          style={{ animationDelay: '0.1s' }}
+        >
           <ImageCarousel images={CAROUSEL_IMAGES} />
         </div>
 
         {/* Start button */}
-        <div className="text-center mb-10">
+        <div
+          className="mb-10 animate-fade-up text-center"
+          style={{ animationDelay: '0.2s' }}
+        >
           <GameButton
-            color="#26890c"
-            className="w-full sm:w-auto text-2xl px-12 py-5"
+            color="#0d9488"
+            className="w-full px-12 py-5 text-2xl sm:w-auto"
             onClick={startRandomGame}
           >
-            🚀 เริ่มทำแบบทดสอบ
+            <span className="animate-bounce-slow inline-block">🚀</span>
+            เริ่มทำแบบทดสอบ
           </GameButton>
         </div>
 
         {/* Feature cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {FEATURES.map((f) => (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {FEATURES.map((f, i) => (
             <Link
               key={f.to}
               to={f.to}
-              className="block rounded-2xl transition-transform hover:-translate-y-1"
-              style={{ boxShadow: '0 6px 0 rgba(0,0,0,0.25)', backgroundColor: f.color }}
+              className="group block animate-fade-up"
+              style={{ animationDelay: `${0.3 + i * 0.12}s` }}
             >
-              <div className="p-6 text-center text-white">
-                <span className="text-5xl mb-3 block">{f.icon}</span>
-                <h3 className="text-xl font-extrabold mb-1">{f.title}</h3>
-                <p className="text-white/90 text-sm">{f.desc}</p>
+              <div
+                className="h-full rounded-2xl bg-white p-6 text-center shadow-card transition-all duration-300 ring-1 ring-slate-100 group-hover:-translate-y-1.5 group-hover:shadow-lift group-hover:ring-slate-200"
+              >
+                <div
+                  className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6"
+                  style={{ backgroundColor: f.soft }}
+                >
+                  <span className="animate-bounce-slow" style={{ animationDelay: `${i * 0.3}s` }}>
+                    {f.icon}
+                  </span>
+                </div>
+                <h3 className="mb-1 text-xl font-extrabold" style={{ color: f.accent }}>
+                  {f.title}
+                </h3>
+                <p className="text-sm text-muted">{f.desc}</p>
+                <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div className={`h-full w-0 rounded-full transition-all duration-500 ${f.progress} group-hover:w-full`} />
+                </div>
               </div>
             </Link>
           ))}

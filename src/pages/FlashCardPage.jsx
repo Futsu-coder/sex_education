@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import flashcards from '../data/flashcards'
+import { Confetti } from '../components/ui'
 
-const CARD_COLORS = ['#7e30e1', '#7e30e1', '#7e30e1', '#7e30e1', '#7e30e1']
-const CARD_SHADOWS = ['#511d94', '#511d94', '#511d94', '#511d94', '#511d94']
+const CARD_COLORS = ['#2563eb', '#0d9488', '#7c3aed', '#2563eb', '#0d9488']
+const CARD_SHADOWS = ['#1d4ed8', '#0f766e', '#6d28d9', '#1d4ed8', '#0f766e']
 
 function shade(hex, amt) {
   const clean = hex.replace('#', '')
@@ -20,6 +21,7 @@ function FlashCardPage() {
   const [selected, setSelected] = useState(null)
   const [result, setResult] = useState(null)
   const [answeredList, setAnsweredList] = useState([])
+  const [showConfetti, setShowConfetti] = useState(false)
 
   const total = flashcards.length
   const card = flashcards[currentIndex]
@@ -33,10 +35,14 @@ function FlashCardPage() {
     setResult(correct)
     if (correct) {
       setAnsweredList((prev) => [...new Set([...prev, currentIndex])])
+      if (answeredList.length + 1 === total) {
+        setShowConfetti(true)
+        setTimeout(() => setShowConfetti(false), 4000)
+      }
     }
     setTimeout(() => {
       if (correct) setIsFlipped(true)
-    }, 400)
+    }, 500)
   }
 
   const flipBack = () => {
@@ -63,61 +69,65 @@ function FlashCardPage() {
 
     if (selected === null) {
       return isYesChoice
-        ? 'bg-[#26890c] text-white shadow-[0_6px_0_#1b6008]'
-        : 'bg-[#e21b3c] text-white shadow-[0_6px_0_#a6132c]'
+        ? 'bg-accent text-white shadow-[0_5px_0_#0f766e]'
+        : 'bg-danger text-white shadow-[0_5px_0_#b91c1c]'
     }
 
     if (isYesChoice === correctIsYes && result === true) {
-      return 'bg-[#26890c] text-white shadow-[0_6px_0_#1b6008] ring-4 ring-[#26890c]/30'
+      return 'bg-accent text-white shadow-[0_5px_0_#0f766e] ring-4 ring-green-300/50 animate-pop'
     }
     if (choice === selected && result === false) {
-      return 'bg-[#e21b3c] text-white shadow-[0_6px_0_#a6132c] opacity-70'
+      return 'bg-danger text-white shadow-[0_5px_0_#b91c1c] opacity-70 animate-shake'
     }
     if (selected !== null && result !== null && choice !== selected) {
-      return 'bg-white text-[#26890c] border-2 border-[#26890c] opacity-100'
+      return 'bg-white text-accent border-2 border-accent opacity-100'
     }
-    return 'bg-[#1368ce] text-white shadow-[0_6px_0_#0d4a99]'
+    return 'bg-primary text-white shadow-[0_5px_0_#1d4ed8]'
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-[#f4f5fb]">
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-8">
+    <div className="relative min-h-screen overflow-hidden">
+      {showConfetti && <Confetti />}
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
         <div className="w-full max-w-xl">
           {/* Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex animate-fade-up items-center justify-between">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 font-extrabold text-[#1368ce] hover:opacity-80 transition-opacity"
+              className="inline-flex items-center gap-2 font-extrabold hover:opacity-80 transition-opacity"
             >
               ← Flash Card
             </Link>
-            <span className="bg-white rounded-xl px-4 py-2 font-extrabold text-[#1368ce] shadow-[0_4px_0_rgba(0,0,0,0.12)]">
-              ⭐ เฉลยแล้ว {answeredList.length} / {total}
+            <span className="rounded-xl bg-white px-4 py-2 font-extrabold shadow-card ring-1 ring-slate-100">
+              ⭐ เฉลยแล้ว <span className="tabular-nums">{answeredList.length}</span> / {total}
             </span>
           </div>
 
           {/* Progress */}
-          <div className="mb-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-extrabold text-[#7e30e1] uppercase tracking-wide">
+          <div className="mb-3 animate-fade-up" style={{ animationDelay: '0.05s' }}>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-sm font-extrabold uppercase tracking-wide text-primary">
                 เลเวลการ์ด
               </span>
-              <span className="text-sm font-extrabold text-[#1c1c1c]">
-                การ์ด {currentIndex + 1} / {total}
+              <span className="text-sm font-extrabold text-ink">
+                การ์ด <span className="tabular-nums">{currentIndex + 1}</span> / {total}
               </span>
             </div>
-            <div className="h-5 bg-white rounded-full shadow-[0_3px_0_rgba(0,0,0,0.12)] overflow-hidden">
+            <div className="h-3 overflow-hidden rounded-full bg-black/10 shadow-card">
               <div
-                className="h-full transition-all duration-300"
-                style={{ width: `${((currentIndex + 1) / total) * 100}%`, backgroundColor: color, boxShadow: `0 0 0 2px ${shadow}` }}
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${((currentIndex + 1) / total) * 100}%`,
+                  backgroundColor: color,
+                }}
               />
             </div>
           </div>
 
           {/* 3D flip card */}
           <div
-            className="relative w-full mb-8"
-            style={{ perspective: '1500px' }}
+            className="relative mb-8 w-full animate-fade-up"
+            style={{ perspective: '1500px', animationDelay: '0.1s' }}
           >
             <div
               className="relative min-h-[320px] cursor-pointer transition-transform"
@@ -130,7 +140,7 @@ function FlashCardPage() {
             >
               {/* Front: Question */}
               <div
-                className="absolute inset-0 rounded-3xl p-8 flex flex-col"
+                className="absolute inset-0 flex flex-col rounded-3xl p-8"
                 style={{
                   backfaceVisibility: 'hidden',
                   backgroundColor: color,
@@ -138,28 +148,28 @@ function FlashCardPage() {
                   border: '4px solid #ffffff',
                 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <span className="bg-white/20 text-white text-xs font-extrabold uppercase tracking-wide px-4 py-1.5 rounded-full">
+                <div className="mb-6 flex items-center justify-between">
+                  <span className="rounded-full bg-white/20 px-4 py-1.5 text-xs font-extrabold uppercase tracking-wide text-white">
                     🃏 ข้อความ · ตอบจริงหรือเท็จ
                   </span>
-                  <span className="bg-white/20 text-white font-extrabold px-3 py-1 rounded-lg">
+                  <span className="rounded-lg bg-white/20 px-3 py-1 font-extrabold text-white">
                     #{currentIndex + 1}
                   </span>
                 </div>
 
-                <div className="flex-1 flex items-center justify-center my-6">
-                  <p className="text-white text-2xl sm:text-3xl font-extrabold leading-snug text-center drop-shadow-sm">
+                <div className="my-6 flex flex-1 items-center justify-center">
+                  <p className="text-center text-2xl font-extrabold leading-snug text-white drop-shadow-sm sm:text-3xl">
                     {card.statement}
                   </p>
                 </div>
 
                 <div className="text-center">
                   {canGoNext ? (
-                    <span className="inline-block bg-white/25 text-white font-extrabold px-4 py-2 rounded-full">
+                    <span className="inline-block rounded-full bg-white/25 px-4 py-2 font-extrabold text-white">
                       ✅ ตอบถูกแล้ว · แตะการ์ดเพื่อดูเฉลย
                     </span>
                   ) : (
-                    <span className="inline-block text-white/90 text-sm font-bold">
+                    <span className="inline-block text-sm font-bold text-white/90">
                       กด จริง หรือ เท็จ เพื่อตอบ
                     </span>
                   )}
@@ -168,7 +178,7 @@ function FlashCardPage() {
 
               {/* Back: Answer */}
               <div
-                className="absolute inset-0 rounded-3xl p-8 flex flex-col text-center"
+                className="absolute inset-0 flex flex-col rounded-3xl p-8 text-center"
                 style={{
                   backfaceVisibility: 'hidden',
                   transform: 'rotateY(180deg)',
@@ -177,17 +187,17 @@ function FlashCardPage() {
                   border: '4px solid #ffffff',
                 }}
               >
-                <span className="text-xs font-extrabold uppercase tracking-wide text-white/80 mb-5">
+                <span className="mb-5 text-xs font-extrabold uppercase tracking-wide text-white/80">
                   💡 คำเฉลย
                 </span>
-                <h2 className="text-4xl font-extrabold mb-4 text-white">
+                <h2 className="mb-4 text-4xl font-extrabold text-white">
                   {card.answer === 'yes' ? 'จริง ✅' : 'เท็จ ❌'}
                 </h2>
-                <p className="flex-1 text-white/95 leading-relaxed overflow-y-auto">
+                <p className="flex-1 leading-relaxed text-white/95 overflow-y-auto">
                   {card.explanation}
                 </p>
                 {canGoNext && (
-                  <span className="mt-5 inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full">
+                  <span className="mt-5 inline-block rounded-full bg-white/20 px-4 py-2 text-sm font-bold text-white">
                     แตะการ์ดเพื่อพลิกกลับ
                   </span>
                 )}
@@ -197,12 +207,12 @@ function FlashCardPage() {
 
           {/* True/False buttons */}
           {!isFlipped && (
-            <div className="grid grid-cols-2 gap-4">
+            <div key={currentIndex} className="grid animate-fade-up grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => checkAnswer('yes')}
                 disabled={result === true}
-                className={`px-4 py-5 rounded-2xl text-white font-extrabold text-2xl transition-all active:translate-y-1 active:shadow-none ${buttonStyle('yes')}`}
+                className={`rounded-2xl px-4 py-5 text-2xl font-extrabold text-white transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${buttonStyle('yes')}`}
               >
                 ✅ จริง
               </button>
@@ -210,7 +220,7 @@ function FlashCardPage() {
                 type="button"
                 onClick={() => checkAnswer('no')}
                 disabled={result === true}
-                className={`px-4 py-5 rounded-2xl text-white font-extrabold text-2xl transition-all active:translate-y-1 active:shadow-none ${buttonStyle('no')}`}
+                className={`rounded-2xl px-4 py-5 text-2xl font-extrabold text-white transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${buttonStyle('no')}`}
               >
                 ❌ เท็จ
               </button>
@@ -218,12 +228,12 @@ function FlashCardPage() {
           )}
 
           {result === false && !isFlipped && (
-            <div className="mt-4 text-center">
-              <p className="font-extrabold text-[#e21b3c]">❌ ยังไม่ถูกต้อง ลองอีกครั้ง</p>
+            <div key={result} className="mt-4 animate-pop text-center">
+              <p className="font-extrabold text-danger">❌ ยังไม่ถูกต้อง ลองอีกครั้ง</p>
               <button
                 type="button"
                 onClick={() => setIsFlipped(true)}
-                className="mt-2 font-extrabold text-[#1368ce] underline"
+                className="mt-2 font-extrabold text-primary underline"
               >
                 พลิกการ์ดดูเฉลย →
               </button>
@@ -232,24 +242,24 @@ function FlashCardPage() {
 
           {/* Round prev/next arrow buttons */}
           {isFlipped && (
-            <div className="flex items-center justify-center gap-6 mt-2">
+            <div className="mt-2 flex animate-fade-up items-center justify-center gap-6">
               <button
                 type="button"
                 onClick={prevCard}
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl transition-all active:translate-y-1 active:shadow-none"
-                style={{ backgroundColor: '#1368ce', boxShadow: '0 6px 0 #0d4a99' }}
+                className="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.95]"
+                style={{ backgroundColor: '#2563eb', boxShadow: '0 5px 0 #1d4ed8' }}
                 aria-label="ก่อนหน้า"
               >
                 ←
               </button>
-              <span className="bg-white rounded-full px-5 py-2 font-extrabold text-[#1368ce] shadow-[0_4px_0_rgba(0,0,0,0.12)]">
+              <span className="rounded-full bg-white px-5 py-2 font-extrabold shadow-card ring-1 ring-slate-100">
                 {card.answer === 'yes' ? 'จริง' : 'เท็จ'} · ไปต่อ
               </span>
               <button
                 type="button"
                 onClick={nextCard}
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl transition-all active:translate-y-1 active:shadow-none"
-                style={{ backgroundColor: '#26890c', boxShadow: '0 6px 0 #1b6008' }}
+                className="flex h-16 w-16 items-center justify-center rounded-full text-2xl text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.95]"
+                style={{ backgroundColor: '#0d9488', boxShadow: '0 5px 0 #0f766e' }}
                 aria-label="ถัดไป"
               >
                 →
@@ -258,14 +268,14 @@ function FlashCardPage() {
           )}
 
           {!isFlipped && result === null && (
-            <div className="flex justify-center mt-6">
+            <div className="mt-6 flex justify-center">
               <button
                 type="button"
                 onClick={() => {
                   setCurrentIndex(0)
                   flipBack()
                 }}
-                className="font-extrabold text-[#1368ce] underline"
+                className="font-extrabold text-primary underline"
               >
                 ↺ เริ่มใหม่
               </button>
