@@ -24,14 +24,17 @@ function ImageCarousel({ images, interval = 4000 }) {
     return () => clearInterval(id)
   }, [paused, interval, next, total])
 
+  const arrowClass =
+    'absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 hover:bg-white text-ink shadow flex items-center justify-center transition-colors'
+
   return (
     <div
-      className="relative w-full overflow-hidden bg-slate-100"
+      className="relative w-full bg-slate-100"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* Slides */}
-      <div className="relative h-[280px] sm:h-[360px] md:h-[420px]">
+      <div className="relative h-[280px] sm:h-[360px] md:h-[420px] overflow-hidden">
         {images.map((src, i) => (
           <img
             key={src}
@@ -43,39 +46,61 @@ function ImageCarousel({ images, interval = 4000 }) {
             }`}
           />
         ))}
-      </div>
 
-      {/* Arrow buttons */}
-      <button
-        type="button"
-        onClick={prev}
-        aria-label="รูปก่อนหน้า"
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-ink shadow flex items-center justify-center text-xl transition-colors"
-      >
-        ‹
-      </button>
-      <button
-        type="button"
-        onClick={next}
-        aria-label="รูปถัดไป"
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-ink shadow flex items-center justify-center text-xl transition-colors"
-      >
-        ›
-      </button>
+        {/* Left arrow */}
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="รูปก่อนหน้า"
+          className={`${arrowClass} left-2`}
+        >
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => goTo(i)}
-            aria-label={`ไปรูปที่ ${i + 1}`}
-            className={`h-2.5 rounded-full transition-all duration-300 ${
-              i === current ? 'w-6 bg-primary' : 'w-2.5 bg-white/70 hover:bg-white'
-            }`}
-          />
-        ))}
+        {/* Right arrow */}
+        <button
+          type="button"
+          onClick={next}
+          aria-label="รูปถัดไป"
+          className={`${arrowClass} right-2`}
+        >
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+
+        {/* Dots */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`ไปรูปที่ ${i + 1}`}
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                i === current ? 'w-6 bg-primary' : 'w-2.5 bg-white/70 hover:bg-white'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

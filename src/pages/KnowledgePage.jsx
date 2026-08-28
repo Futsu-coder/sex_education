@@ -48,8 +48,7 @@ function KnowledgePage() {
             💊 คู่มือความรู้เรื่องสุขภาพ
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            Prep ก่อนเสี่ยง
-            <br className="hidden md:block" /> Pep หลังเสี่ยง
+            Prep <span className="text-amber-200">ก่อนเสี่ยง</span> Pep <span className="text-amber-200">หลังเสี่ยง</span>
           </h1>
           <p className="text-lg max-w-2xl mx-auto text-teal-50">
             รู้ทัน ป้องกัน HIV ได้อย่างมั่นใจ
