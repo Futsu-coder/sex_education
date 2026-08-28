@@ -59,11 +59,11 @@
 ### 4.1 Knowledge Page (`/`) — `KnowledgePage.jsx`
 - **Container:** `max-w-4xl` centered, wrapped ใน `PageBlobs variant="home"`.
 - **Top bar:** ข้อความหัวข้อใน pill สีขาว + gradient text (blue→teal), เป็นทางการ.
-- **Hero carousel** (`ImageCarousel`): รูปเลื่อนพร้อมลูกศร white soft shadow + dots animation (teal เมื่อ active เป็น bar).
-- **CTA:** ปุ่ม "เริ่มทำแบบทดสอบ" `accent` ใหญ่กลางหน้า พร้อม rocket `bounce-slow`.
+- **Hero carousel** (`ImageCarousel`): รูปเลื่อนพร้อมลูกศร white soft shadow + dots animation (teal เมื่อ active เป็น bar); **สไลด์อัตโนมัติทุก `3000ms`** (เดิม 4000ms); path รูปดึงจากไฟล์รองรับ `src/data/images.js` (`CAROUSEL_IMAGES`) โดยอ้างชื่อไฟล์จริง `PrEP1.jpg` … `PrEP6.webp` ใน `public/รูปตัวอย่าง/`.
 - **Feature cards** (3 ใบ → Quiz / FlashCard / GroupSort):
   - แต่ละใบมี icon ในกล่อง soft color, title สี accent เฉพาะ, progress bar ที่ไหลเต็มเมื่อ hover, ขอบ `border-line` (เปลี่ยนเป็น primary เมื่อ hover).
   - **Animation:** เข้าหน้าแบบ **stagger fade-up** ทีละใบ, icon โบก (bounce), hover เงยขึ้น + shadow-lift + progress bar เต็ม.
+- **CTA:** (ลบแล้ว) ปุ่ม "เริ่มทำแบบทดสอบ" ถูกนำออกจากหน้าแรก — ผู้ใช้เข้าสู่เกมผ่าน feature cards โดยตรง.
 
 ### 4.2 Quiz Page (`/quiz`) — `QuizPage.jsx`
 - **Layout:** Card กลางจอ `max-w-2xl`, wrapped ใน `PageBlobs variant="quiz"`.
@@ -128,6 +128,10 @@
 - **`FloatingElements`** — ชุดอิโมจิ ตกแต่งลอย/หมุนช้าๆ หลังเนื้อหา (ใช้ใน `PageBlobs`), opacity ต่ำ, ซ่อนบนจอเล็ก (`hidden lg:block`).
 
 **`CursorGlow.jsx`** (ใหม่) — glow เบาๆ ติดตาม cursor, ใช้ `requestAnimationFrame` + lerp; mount ใน `App.jsx` เพื่อให้ทุกหน้า; ปิดเมื่อ `prefers-reduced-motion` หรือจอมือถือ (`md:`).
+
+**`ImageCarousel.jsx`** — slideshow รูป เลื่อนอัตโนมัติ (`interval` default 4000ms, หน้า index ใช้ 3000ms), ลูกศร white soft shadow, dots (active เป็น bar teal); หยุดชั่วคราวเมื่อ hover.
+
+**Data manifest `src/data/images.js`** — ไฟล์รองรับรวม path รูป carousel (`CAROUSEL_IMAGES`) อ้างชื่อไฟล์จริงใน `public/รูปตัวอย่าง/` (`PrEP1.jpg`, `PrEP2.jpg`, `PrEP3.png`, `PrEP4.jpg`, `PrEP5.jpg`, `PrEP6.webp`) — แหล่งเดียวที่จัดการ path รูป เพื่อไม่ให้ hardcode ตามหน้า.
 
 ## 7. Suggested CSS Framework
 - **Tailwind CSS v4** ผ่าน `@tailwindcss/vite` (ใน `vite.config.js`) — config ผ่าน `@theme` ใน `src/index.css` ไม่ต้องใช้ PostCSS/config file.

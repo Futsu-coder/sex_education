@@ -1,17 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ImageCarousel from '../components/ImageCarousel'
-import { GameButton, PageBlobs } from '../components/ui'
+import { PageBlobs } from '../components/ui'
+import { CAROUSEL_IMAGES } from '../data/images'
 
-const GAME_LINKS = ['/quiz', '/flashcard', '/groupsort']
-
-const CAROUSEL_IMAGES = [
-  '/รูปตัวอย่าง/1.jpg',
-  '/รูปตัวอย่าง/2.jpg',
-  '/รูปตัวอย่าง/3.jpg',
-  '/รูปตัวอย่าง/4.jpg',
-  '/รูปตัวอย่าง/5.jpg',
-  '/รูปตัวอย่าง/6.jpg',
-]
 
 const FEATURES = [
   {
@@ -47,13 +38,6 @@ const FEATURES = [
 ]
 
 function KnowledgePage() {
-  const navigate = useNavigate()
-
-  const startRandomGame = () => {
-    const random = GAME_LINKS[Math.floor(Math.random() * GAME_LINKS.length)]
-    navigate(random)
-  }
-
   return (
     <PageBlobs variant="home">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
@@ -72,22 +56,7 @@ function KnowledgePage() {
           className="mb-8 animate-fade-up overflow-hidden rounded-3xl shadow-card border-2 border-[#cfd9e6]"
           style={{ animationDelay: '0.1s' }}
         >
-          <ImageCarousel images={CAROUSEL_IMAGES} />
-        </div>
-
-        {/* Start button */}
-        <div
-          className="mb-10 animate-fade-up text-center"
-          style={{ animationDelay: '0.2s' }}
-        >
-          <GameButton
-            color="#0d9488"
-            className="w-full px-12 py-5 text-2xl sm:w-auto"
-            onClick={startRandomGame}
-          >
-            <span className="animate-bounce-slow inline-block">🚀</span>
-            เริ่มทำแบบทดสอบ
-          </GameButton>
+          <ImageCarousel images={CAROUSEL_IMAGES} interval={3000} />
         </div>
 
         {/* Feature cards */}
