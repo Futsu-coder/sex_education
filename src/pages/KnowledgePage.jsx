@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ImageCarousel from '../components/ImageCarousel'
+import { GameButton, GameCard } from '../components/ui'
+
+const GAME_LINKS = ['/quiz', '/flashcard', '/groupsort']
 
 const CAROUSEL_IMAGES = [
   '/รูปตัวอย่าง/1.jpg',
@@ -12,99 +15,81 @@ const CAROUSEL_IMAGES = [
 
 const FEATURES = [
   {
-    icon: '📝',
-    title: 'แบบทดสอบ 4 ตัวเลือก',
-    desc: 'ทดสอบความรู้ พร้อม feedback ทันที',
+    icon: '🎯',
+    title: 'เกมตอบคำถาม',
+    desc: 'ทดสอบความรู้ พร้อมคะแนนสะสม',
     to: '/quiz',
-    primary: true,
+    color: '#e21b3c',
   },
   {
     icon: '🃏',
     title: 'Flash Card',
-    desc: 'ตอบ จริง/เท็จ แล้วพลิกดูเฉลย',
+    desc: 'จริง/เท็จ พลิกดูเฉลย',
     to: '/flashcard',
-    primary: false,
+    color: '#d89e00',
   },
   {
-    icon: '🗂️',
+    icon: '🧩',
     title: 'จัดกลุ่มคำศัพท์',
-    desc: 'ลากคำศัพท์ไปวางในกลุ่มที่ถูก',
+    desc: 'ลากคำศัพท์ไปให้ถูกหมวด',
     to: '/groupsort',
-    primary: false,
+    color: '#26890c',
   },
 ]
 
 function KnowledgePage() {
-  return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-teal-500 via-primary to-emerald-400 text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white" />
-          <div className="absolute bottom-0 left-10 w-56 h-56 rounded-full bg-white" />
-        </div>
-        <div className="relative max-w-3xl mx-auto px-6 py-16 md:py-20 text-center">
-          <span className="inline-block bg-white/20 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            💊 คู่มือความรู้เรื่องสุขภาพ
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            Prep <span className="text-amber-200">ก่อนเสี่ยง</span> Pep <span className="text-amber-200">หลังเสี่ยง</span>
-          </h1>
-          <p className="text-lg max-w-2xl mx-auto text-teal-50">
-            รู้ทัน ป้องกัน HIV ได้อย่างมั่นใจ
-            — ด้วยแบบฝึกหัดที่ออกแบบมาให้เรียนรู้ได้จริง
-          </p>
-        </div>
-      </section>
+  const navigate = useNavigate()
 
+  const startRandomGame = () => {
+    const random = GAME_LINKS[Math.floor(Math.random() * GAME_LINKS.length)]
+    navigate(random)
+  }
+
+  return (
+    <div className="min-h-screen relative overflow-hidden">
       {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-12">
-        {/* Image carousel */}
-        <div className="rounded-2xl overflow-hidden shadow-sm mb-10">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
+        {/* Top bar */}
+        <div className="flex items-center justify-center mb-8">
+          <GameCard color="#ffffff" className="px-6 py-2">
+            <span className="text-xl font-extrabold text-[#1368ce]">💊 Prep ก่อนเสี่ยง · PEP หลังเสี่ยง</span>
+          </GameCard>
+        </div>
+
+        {/* Hero carousel */}
+        <div className="rounded-3xl overflow-hidden mb-8 border-4 border-white">
           <ImageCarousel images={CAROUSEL_IMAGES} />
         </div>
 
-        {/* Quick links */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+        {/* Start button */}
+        <div className="text-center mb-10">
+          <GameButton
+            color="#26890c"
+            className="w-full sm:w-auto text-2xl px-12 py-5"
+            onClick={startRandomGame}
+          >
+            🚀 เริ่มทำแบบทดสอบ
+          </GameButton>
+        </div>
+
+        {/* Feature cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
             <Link
               key={f.to}
               to={f.to}
-              className={`group rounded-2xl p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
-                f.primary
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-card border-2 border-slate-200 shadow-sm hover:border-primary'
-              }`}
+              className="block rounded-2xl transition-transform hover:-translate-y-1"
+              style={{ boxShadow: '0 6px 0 rgba(0,0,0,0.25)', backgroundColor: f.color }}
             >
-              <span
-                className={`text-3xl mb-3 block ${
-                  f.primary ? '' : 'group-hover:scale-110 transition-transform'
-                }`}
-              >
-                {f.icon}
-              </span>
-              <h3 className="text-lg font-semibold mb-1">{f.title}</h3>
-              <p
-                className={`text-sm ${
-                  f.primary ? 'text-teal-50' : 'text-muted'
-                }`}
-              >
-                {f.desc}
-              </p>
-              <span
-                className={`mt-4 inline-flex items-center gap-1 text-sm font-medium ${
-                  f.primary ? 'text-white' : 'text-primary'
-                }`}
-              >
-                เริ่มเลย
-                <span className="transition-transform group-hover:translate-x-1">
-                  →
-                </span>
-              </span>
+              <div className="p-6 text-center text-white">
+                <span className="text-5xl mb-3 block">{f.icon}</span>
+                <h3 className="text-xl font-extrabold mb-1">{f.title}</h3>
+                <p className="text-white/90 text-sm">{f.desc}</p>
+              </div>
             </Link>
           ))}
         </div>
-      </main>
+      </div>
     </div>
   )
 }

@@ -25,11 +25,12 @@ function ImageCarousel({ images, interval = 4000 }) {
   }, [paused, interval, next, total])
 
   const arrowClass =
-    'absolute top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/85 hover:bg-white text-ink shadow flex items-center justify-center transition-colors'
+    'absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white text-ink flex items-center justify-center transition-all active:translate-y-[calc(-50%+2px)] active:shadow-none'
+  const arrowShadow = { boxShadow: '0 4px 0 rgba(0,0,0,0.25)' }
 
   return (
     <div
-      className="relative w-full bg-slate-100"
+      className="relative w-full bg-white"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -53,6 +54,7 @@ function ImageCarousel({ images, interval = 4000 }) {
           onClick={prev}
           aria-label="รูปก่อนหน้า"
           className={`${arrowClass} left-2`}
+          style={arrowShadow}
         >
           <svg
             className="w-5 h-5"
@@ -73,6 +75,7 @@ function ImageCarousel({ images, interval = 4000 }) {
           onClick={next}
           aria-label="รูปถัดไป"
           className={`${arrowClass} right-2`}
+          style={arrowShadow}
         >
           <svg
             className="w-5 h-5"
@@ -88,15 +91,15 @@ function ImageCarousel({ images, interval = 4000 }) {
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 rounded-full bg-black/30">
           {images.map((_, i) => (
             <button
               key={i}
               type="button"
               onClick={() => goTo(i)}
               aria-label={`ไปรูปที่ ${i + 1}`}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
-                i === current ? 'w-6 bg-primary' : 'w-2.5 bg-white/70 hover:bg-white'
+              className={`h-3 rounded-full transition-all duration-300 ${
+                i === current ? 'w-7 bg-[#d89e00]' : 'w-3 bg-white/70 hover:bg-white'
               }`}
             />
           ))}

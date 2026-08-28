@@ -1,14 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #14b8a6;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-surface: #f0fdfa;
-  --color-card: #ffffff;
-  --color-ink: #1e293b;
-  --color-muted: #64748b;
-  --font-sans: 'Prompt', 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* Kahoot-style flat palette */
+  --color-primary: #1368ce;     /* Blue (main action) */
+  --color-red: #e21b3c;         /* Red */
+  --color-blue: #1368ce;        /* Blue */
+  --color-yellow: #d89e00;      /* Yellow */
+  --color-green: #26890c;       /* Green */
+  --color-purple: #7e30e1;      /* Purple */
+  --color-success: #26890c;     /* Green */
+  --color-danger: #e21b3c;      /* Red */
+  --color-surface: #7e30e1;     /* Page background: playful purple */
+  --color-card: #ffffff;        /* White card */
+  --color-ink: #1c1c1c;         /* Dark text */
+  --color-muted: #5f5f5f;       /* Secondary text */
+  --font-sans: 'Baloo 2', 'Prompt', 'Inter', system-ui, 'Segoe UI', Roboto,
+    sans-serif;
 }
 
 body {
