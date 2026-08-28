@@ -1,70 +1,66 @@
-import { useRef, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { groupSortItems, groups } from '../data/groupSort'
 
 const GROUP_COLORS = ['#1368ce', '#26890c', '#d89e00', '#e21b3c']
 const GROUP_SHADOWS = ['#0d4a99', '#1b6008', '#a17400', '#a6132c']
 
-function GroupSortPage() {
-  const [assigned, setAssigned] = useState(() => groups.map(() => []))
-  const [isChecked, setIsChecked] = useState(false)
-  const [showIncorrectOverlay, setShowIncorrectOverlay] = useState(false)
-  const [dragItem, setDragItem] = useState(null)
-  const [dragOverGroup, setDragOverGroup] = useState(null)
-  const dragItemRef = useRef(null)
+function FlashCardPage() {
+  // States สำหรับ Quiz Logic
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isFlipped, setIsFlipped] = useState(false)
+  
+  // State สำหรับเก็บผลการตอบ
+  const [userChoice, setUserChoice] = useState(null)
+  const [isAnswered, setIsAnswered] = useState(false)
+  const [score, setScore] = useState(0)
+  const [isFinished, setIsFinished] = useState(false)
+  
+  // Effects
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
-  const totalItems = groupSortItems.length
-  const placedCount = assigned.reduce((sum, g) => sum + g.length, 0)
+  const total = prepPepFlashcards.length
+  const card = prepPepFlashcards[currentIndex]
 
-  const isAssigned = (text) =>
-    assigned.some((group) => group.includes(text))
+  // ฟังก์ชันจัดการตอนกดตอบ
+  const handleAnswer = (choice) => {
+    if (isAnswered) return // กันการกดย้ำ
 
-  const assignItem = (text, groupIndex) => {
-    if (isAssigned(text) || isChecked) return
-    setAssigned((prev) =>
-      prev.map((group, gi) =>
-        gi === groupIndex ? [...group, text] : group,
-      ),
-    )
+    setUserChoice(choice)
+    setIsAnswered(true)
+
+    const isCorrect = choice === card.answer
+    if (isCorrect) {
+      setScore(prev => prev + 1)
+    }
+
+    // หน่วงเวลาให้เห็น Animation ของปุ่มที่กดก่อนพลิกการ์ด (Human feel)
+    setTimeout(() => {
+      setIsFlipped(true)
+    }, 800)
   }
 
-  const removeItem = (text, groupIndex) => {
-    if (isChecked) return
-    setAssigned((prev) =>
-      prev.map((group, gi) =>
-        gi === groupIndex ? group.filter((t) => t !== text) : group,
-      ),
-    )
-  }
-
-  const groupIsCorrect = (gi) => {
-    const expected = groupSortItems
-      .filter((i) => i.group === groups[gi])
-      .map((i) => i.text)
-      .sort()
-    const actual = [...assigned[gi]].sort()
-    return (
-      actual.length === expected.length &&
-      actual.every((t, idx) => t === expected[idx])
-    )
-  }
-
-  const allCorrect = groups.every((_, gi) => groupIsCorrect(gi))
-
-  const checkAnswer = () => {
-    if (placedCount !== totalItems || isChecked) return
-    setIsChecked(true)
-    if (!groups.every((_, gi) => groupIsCorrect(gi))) {
-      setShowIncorrectOverlay(true)
+  const handleNext = () => {
+    if (currentIndex === total - 1) {
+      setIsFinished(true)
+    } else {
+      setIsFlipped(false)
+      // รอให้การ์ดพลิกกลับก่อนเปลี่ยนเนื้อหา ป้องกันตาเหล่
+      setTimeout(() => {
+        setCurrentIndex(prev => prev + 1)
+        setIsAnswered(false)
+        setUserChoice(null)
+      }, 300)
     }
   }
 
-  const reset = () => {
-    setAssigned(groups.map(() => []))
-    setIsChecked(false)
-    setShowIncorrectOverlay(false)
-    setDragItem(null)
-    setDragOverGroup(null)
+  const handleRestart = () => {
+    setCurrentIndex(0)
+    setScore(0)
+    setIsFinished(false)
+    setIsAnswered(false)
+    setUserChoice(null)
+    setIsFlipped(false)
   }
 
   /* ----- Drag and drop handlers ----- */
@@ -75,39 +71,44 @@ function GroupSortPage() {
     e.dataTransfer.setData('text/plain', text)
   }
 
-  const handleDragOver = (e, gi) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-    setDragOverGroup(gi)
-  }
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-[#030712] overflow-hidden relative">
+        {/* Ambient Background Effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-  const handleDrop = (e, gi) => {
-    e.preventDefault()
-    const dragged = dragItemRef.current
-    if (!dragged || isChecked) return
-    setDragOverGroup(gi)
-    setDragItem(dragged.text)
-    setAssigned((prev) =>
-      prev.map((group, groupIndex) => {
-        if (groupIndex === dragged.sourceGroup) {
-          return group.filter((t) => t !== dragged.text)
-        }
-        if (groupIndex === gi) {
-          return [...group, dragged.text]
-        }
-        return group
-      }),
-    )
-    dragItemRef.current = null
-    setDragItem(null)
-    setDragOverGroup(null)
-  }
+        <div className={`w-full max-w-md z-10 transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className="bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] border border-white/10 p-10 text-center shadow-2xl relative overflow-hidden">
+            
+            {/* โลหะสะท้อนแสงพาดผ่านกรอบ */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5 opacity-50"></div>
 
-  const handleDragEnd = () => {
-    dragItemRef.current = null
-    setDragItem(null)
-    setDragOverGroup(null)
-  }
+            <p className="text-indigo-400 font-bold tracking-widest uppercase mb-4 text-sm">Mission Complete</p>
+            <h2 className="text-3xl font-extrabold text-white mb-10">สรุปผลการทดสอบ</h2>
+            
+            {/* Circular Progress (จำลองด้วย CSS ล้ำๆ) */}
+            <div className="relative inline-flex items-center justify-center mb-10 group">
+              <div className={`absolute inset-0 bg-gradient-to-r ${ringColor} rounded-full blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-700`}></div>
+              <div className="relative w-48 h-48 rounded-full bg-[#0a0f1c] border border-white/10 flex flex-col items-center justify-center shadow-inner">
+                {/* SVG Ring */}
+                <svg className="absolute inset-0 w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" className="text-white/5" strokeWidth="4" />
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" className={`text-transparent`} strokeWidth="4" strokeDasharray="301.59" strokeDashoffset={301.59 - (301.59 * percentage) / 100} style={{ stroke: 'url(#gradient)', transition: 'stroke-dashoffset 1.5s ease-in-out' }} />
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor={percentage === 100 ? '#34d399' : '#818cf8'} />
+                      <stop offset="100%" stopColor={percentage === 100 ? '#14b8a6' : '#c084fc'} />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                
+                <span className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400">
+                  {score}
+                </span>
+                <div className="w-10 h-0.5 bg-white/10 my-2 rounded-full"></div>
+                <span className="text-xl text-slate-400 font-medium">จาก {total}</span>
+              </div>
+            </div>
 
   return (
     <div className="min-h-screen relative px-4 py-8">
@@ -299,6 +300,8 @@ function GroupSortPage() {
           </button>
         </div>
       </div>
+    )
+  }
 
       {/* Incorrect grouping overlay */}
       {showIncorrectOverlay && (
@@ -336,7 +339,6 @@ function GroupSortPage() {
             </div>
           </div>
         </div>
-      )}
 
       {/* Success feedback (non-blocking) */}
       {isChecked && allCorrect && (
@@ -353,4 +355,4 @@ function GroupSortPage() {
   )
 }
 
-export default GroupSortPage
+export default FlashCardPage
