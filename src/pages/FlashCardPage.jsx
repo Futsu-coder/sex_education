@@ -107,13 +107,13 @@ function FlashCardPage() {
 
             {/* Back: Explanation */}
             <div className="absolute inset-0 bg-primary text-white rounded-2xl shadow-sm border-2 border-primary p-8 flex flex-col items-center justify-center text-center [transform:rotateY(180deg)] [backface-visibility:hidden]">
-              <span className="text-xs font-semibold uppercase tracking-wide text-blue-200 mb-6">
+              <span className="text-xs font-semibold uppercase tracking-wide text-teal-100 mb-6">
                 คำเฉลย
               </span>
               <h2 className="text-2xl font-bold mb-3">
                 {card.answer === 'yes' ? 'จริง' : 'เท็จ'}
               </h2>
-              <p className="text-blue-100 leading-relaxed">{card.explanation}</p>
+              <p className="text-teal-50 leading-relaxed">{card.explanation}</p>
               {canGoNext && (
                 <span className="mt-6 bg-white/20 text-white text-sm font-medium px-4 py-2 rounded-full">
                   คลิกการ์ดเพื่อกลับไปหน้าถัดไป
