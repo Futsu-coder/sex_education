@@ -22,6 +22,8 @@ function FlashCardPage() {
   const [result, setResult] = useState(null)
   const [answeredList, setAnsweredList] = useState([])
   const [showConfetti, setShowConfetti] = useState(false)
+  const [score, setScore] = useState(0)
+  const [isFinished, setIsFinished] = useState(false)
 
   const total = flashcards.length
   const card = flashcards[currentIndex]
@@ -35,8 +37,10 @@ function FlashCardPage() {
     setResult(correct)
     if (correct) {
       setAnsweredList((prev) => [...new Set([...prev, currentIndex])])
+      setScore((s) => s + 1)
       if (answeredList.length + 1 === total) {
         setShowConfetti(true)
+        setTimeout(() => setIsFinished(true), 900)
         setTimeout(() => setShowConfetti(false), 4000)
       }
     }
@@ -61,7 +65,19 @@ function FlashCardPage() {
     flipBack()
   }
 
+  const restartQuiz = () => {
+    setCurrentIndex(0)
+    setIsFlipped(false)
+    setSelected(null)
+    setResult(null)
+    setAnsweredList([])
+    setScore(0)
+    setIsFinished(false)
+    setShowConfetti(false)
+  }
+
   const canGoNext = answeredList.includes(currentIndex)
+  const isPerfect = score === total
 
   const buttonStyle = (choice) => {
     const isYesChoice = choice === 'yes'
@@ -85,6 +101,55 @@ function FlashCardPage() {
     return 'bg-primary text-white shadow-[0_5px_0_#1d4ed8]'
   }
 
+  if (isFinished) {
+    const percent = Math.round((score / total) * 100)
+    const tierMessage =
+      percent === 100
+        ? 'ยอดเยี่ยม! รู้ทุกข้อเลย 🏆'
+        : percent >= 60
+          ? 'ดีมาก! ลองอีกรอบได้นะ'
+          : 'ลองอ่านเนื้อหาแล้วกลับมาใหม่นะ'
+    return (
+      <PageBlobs variant="flashcard">
+        <div className="flex min-h-screen items-center justify-center px-4 py-8">
+          <div className="w-full max-w-md animate-fade-up text-center">
+            <div className="relative rounded-3xl bg-white p-8 shadow-card border-2 border-[#cfd9e6]">
+              <span
+                className="mx-auto mb-4 block h-20 w-20 rounded-full text-5xl animate-pop"
+                style={{ backgroundColor: isPerfect ? '#dbeafe' : '#ccfbf1' }}
+              >
+                {isPerfect ? '🏆' : '🎉'}
+              </span>
+              <h2 className="mb-2 text-3xl font-extrabold">ทำครบแล้ว!</h2>
+              <div
+                className="mx-auto mb-4 inline-flex items-center gap-2 rounded-xl px-6 py-2 text-2xl font-extrabold text-white"
+                style={{ backgroundColor: isPerfect ? '#2563eb' : '#0d9488' }}
+              >
+                <span className="tabular-nums">{score}</span> / {total}
+              </div>
+              <p className="mb-8 text-lg text-muted">{tierMessage}</p>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={restartQuiz}
+                  className="w-full rounded-xl bg-primary px-6 py-4 text-lg font-extrabold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lift active:translate-y-0 active:scale-[0.98]"
+                >
+                  🔄 เล่นอีกครั้ง
+                </button>
+                <Link
+                  to="/"
+                  className="w-full rounded-xl bg-white px-6 py-4 text-lg font-extrabold text-primary ring-1 ring-slate-200 transition-all duration-200 hover:ring-primary active:scale-[0.98]"
+                >
+                  ← กลับหน้าแรก
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </PageBlobs>
+    )
+  }
+
   return (
     <PageBlobs variant="flashcard">
       {showConfetti && <Confetti />}
@@ -99,7 +164,7 @@ function FlashCardPage() {
               ← Flash Card
             </Link>
             <span className="rounded-xl bg-white px-4 py-2 font-extrabold shadow-card border-2 border-[#cfd9e6]">
-              ⭐ เฉลยแล้ว <span className="tabular-nums">{answeredList.length}</span> / {total}
+              ⭐ เฉลยแล้ว <span className="tabular-nums">{score}</span> / {total}
             </span>
           </div>
 
