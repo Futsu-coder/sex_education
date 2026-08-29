@@ -13,8 +13,15 @@ import {
 import { groupSortItems, groups } from '../data/groupSort'
 import { Confetti, PageBlobs } from '../components/ui'
 
-const GROUP_COLORS = ['#2563eb', '#0d9488', '#d97706', '#dc2626']
-const GROUP_SHADOWS = ['#1d4ed8', '#0f766e', '#b45309', '#b91c1c']
+const GROUP_COLORS = ['#2563eb', '#059669', '#d97706', '#9333ea']
+const GROUP_SHADOWS = ['#1d4ed8', '#047857', '#b45309', '#7e22ce']
+
+const GROUP_COLOR_STYLES = [
+  { dot: 'bg-blue-500', bar: 'bg-blue-500', soft: 'bg-blue-50 text-blue-700' },
+  { dot: 'bg-green-500', bar: 'bg-green-500', soft: 'bg-green-50 text-green-700' },
+  { dot: 'bg-amber-500', bar: 'bg-amber-500', soft: 'bg-amber-50 text-amber-700' },
+  { dot: 'bg-purple-500', bar: 'bg-purple-500', soft: 'bg-purple-50 text-purple-700' },
+]
 
 const itemGroup = (text) => groupSortItems.find((i) => i.text === text)?.group
 
