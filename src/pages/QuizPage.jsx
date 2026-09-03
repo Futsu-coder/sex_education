@@ -224,7 +224,7 @@ function QuizPage() {
           <div className="mb-4 flex animate-fade-up items-center justify-between">
             <Link to="/" className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-primary transition-colors">
               <span>←</span>
-              <span>เกม 72 ชั่วโมงสุดท้าย</span>
+              <span>เกมตอบคำถาม</span>
             </Link>
             <div className="flex items-center gap-2">
               <span className="rounded-full bg-white px-3 py-1 text-xs sm:text-sm font-extrabold text-slate-700 shadow-sm border border-[#cfd9e6]">

@@ -7,7 +7,7 @@ import { CAROUSEL_IMAGES } from '../data/images'
 const FEATURES = [
   {
     icon: '⏱️',
-    title: 'เกม 72 ชั่วโมงสุดท้าย',
+    title: 'เกมตอบคำถาม',
     desc: 'สวมบทบาทตัดสินใจเรื่อง PrEP / PEP',
     mode: 'quiz',
     to: '/quiz',
