@@ -6,9 +6,9 @@ import { CAROUSEL_IMAGES } from '../data/images'
 
 const FEATURES = [
   {
-    icon: '🎯',
-    title: 'เกมตอบคำถาม',
-    desc: 'ทดสอบความรู้ พร้อมคะแนนสะสม',
+    icon: '⏱️',
+    title: 'เกม 72 ชั่วโมงสุดท้าย',
+    desc: 'สวมบทบาทตัดสินใจเรื่อง PrEP / PEP',
     mode: 'quiz',
     to: '/quiz',
     accent: '#2563eb',

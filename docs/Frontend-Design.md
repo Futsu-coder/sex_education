@@ -59,7 +59,7 @@
 ### 4.1 Knowledge Page (`/`) — `KnowledgePage.jsx`
 - **Container:** `max-w-4xl` centered, wrapped ใน `PageBlobs variant="home"`.
 - **Top bar:** ข้อความหัวข้อใน pill สีขาว + gradient text (blue→teal), เป็นทางการ.
-- **Hero carousel** (`ImageCarousel`): รูปเลื่อนพร้อมลูกศร white soft shadow + dots animation (teal เมื่อ active เป็น bar); **สไลด์อัตโนมัติทุก `3000ms`** (เดิม 4000ms); path รูปดึงจากไฟล์รองรับ `src/data/images.js` (`CAROUSEL_IMAGES`) โดยอ้างชื่อไฟล์จริง `PrEP1.jpg` … `PrEP6.webp` ใน `public/รูปตัวอย่าง/`.
+- **Hero carousel** (`ImageCarousel`): รูปเลื่อนพร้อมลูกศร white soft shadow + dots animation (teal เมื่อ active เป็น bar); **สไลด์อัตโนมัติทุก `3000ms`** (เดิม 4000ms); path รูปดึงจากไฟล์รองรับ `src/data/images.js` (`CAROUSEL_IMAGES`) โดยอ้างชื่อไฟล์จริง `1.jpg` … `5.jpg` ใน `public/images/`.
 - **Feature cards** (3 ใบ → Quiz / FlashCard / GroupSort):
   - แต่ละใบมี icon ในกล่อง soft color, title สี accent เฉพาะ, progress bar ที่ไหลเต็มเมื่อ hover, ขอบ `border-line` (เปลี่ยนเป็น primary เมื่อ hover).
   - **Animation:** เข้าหน้าแบบ **stagger fade-up** ทีละใบ, icon โบก (bounce), hover เงยขึ้น + shadow-lift + progress bar เต็ม.
@@ -131,7 +131,7 @@
 
 **`ImageCarousel.jsx`** — slideshow รูป เลื่อนอัตโนมัติ (`interval` default 4000ms, หน้า index ใช้ 3000ms), ลูกศร white soft shadow, dots (active เป็น bar teal); หยุดชั่วคราวเมื่อ hover.
 
-**Data manifest `src/data/images.js`** — ไฟล์รองรับรวม path รูป carousel (`CAROUSEL_IMAGES`) อ้างชื่อไฟล์จริงใน `public/รูปตัวอย่าง/` (`PrEP1.jpg`, `PrEP2.jpg`, `PrEP3.png`, `PrEP4.jpg`, `PrEP5.jpg`, `PrEP6.webp`) — แหล่งเดียวที่จัดการ path รูป เพื่อไม่ให้ hardcode ตามหน้า.
+**Data manifest `src/data/images.js`** — ไฟล์รองรับรวม path รูป carousel (`CAROUSEL_IMAGES`) อ้างชื่อไฟล์จริงใน `public/images/` (`1.jpg`, `2.jpg`, `3.jpg`, `4.jpg`, `5.jpg`) — แหล่งเดียวที่จัดการ path รูป เพื่อไม่ให้ hardcode ตามหน้า.
 
 ## 7. Suggested CSS Framework
 - **Tailwind CSS v4** ผ่าน `@tailwindcss/vite` (ใน `vite.config.js`) — config ผ่าน `@theme` ใน `src/index.css` ไม่ต้องใช้ PostCSS/config file.

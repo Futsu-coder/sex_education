@@ -1,49 +1,162 @@
 const questions = [
   {
-    questionText: 'React ถูกพัฒนาขึ้นโดยบริษัทใด?',
-    answerOptions: [
-      { answerText: 'Google', isCorrect: false },
-      { answerText: 'Microsoft', isCorrect: false },
-      { answerText: 'Meta (Facebook)', isCorrect: true },
-      { answerText: 'Apple', isCorrect: false },
+    chapter: 'บทนำ — “แค่เรื่องใกล้ตัว”',
+    story: 'ช่วงเย็นหลังเลิกเรียน นัทกับมินนั่งอยู่ที่ร้านกาแฟใกล้มหาวิทยาลัย มินเปิดเอกสารสุขศึกษาที่อาจารย์ให้มาแล้วเริ่มสนใจเรื่องการป้องกัน HIV',
+    dialogues: [
+      { speaker: 'มิน', text: 'นัท นายเคยได้ยินคำว่า PrEP กับ PEP ไหม? ช่วงนี้เห็นคนพูดถึงเยอะ แต่ฉันไม่รู้ว่ามันต่างกันยังไง' },
+      { speaker: 'นัท', text: 'เคยได้ยินนะ ในเอกสารบอกว่ามียาสองชนิดที่เกี่ยวข้องกับการป้องกัน HIV แต่ใช้ในสถานการณ์ต่างกัน' },
     ],
+    questionText: 'ถ้านัทยังไม่เกิดเหตุการณ์เสี่ยง แต่ต้องการป้องกัน HIV ก่อนที่จะมีความเสี่ยง ยาชนิดใดเกี่ยวข้องกับสถานการณ์นี้?',
+    answerOptions: [
+      { answerText: 'ยานัตถุ์หมอมีแก้ฝีแก้หิด', isCorrect: false },
+      { answerText: 'PrEP', isCorrect: true },
+      { answerText: 'PEP', isCorrect: false },
+      { answerText: ' ยานัตถุ์หมอชิตแก้หิดแก้ฝี', isCorrect: false },
+    ],
+    explanation: 'PrEP คือยาป้องกันการติดเชื้อ HIV ก่อนเกิดความเสี่ยง ใช้กับผู้ที่ยังไม่มีเชื้อ HIV แต่มีความเสี่ยงต่อการสัมผัสเชื้อ',
   },
   {
-    questionText: 'Hook ใดที่ใช้สำหรับจัดการ state ใน Functional Component?',
-    answerOptions: [
-      { answerText: 'useEffect', isCorrect: false },
-      { answerText: 'useState', isCorrect: true },
-      { answerText: 'useReducer', isCorrect: false },
-      { answerText: 'useContext', isCorrect: false },
+    chapter: 'บทที่ 2 — “ก่อนที่อะไรจะเกิดขึ้น”',
+    story: 'มินเริ่มสนใจเรื่อง PrEP มากขึ้น และพบว่าเหมาะสำหรับผู้ที่ยังไม่มีเชื้อ HIV แต่มีความเสี่ยง เช่น มีเพศสัมพันธ์โดยไม่ใช้ถุงยางอนามัย หรือมีความเสี่ยงจากการใช้เข็มร่วมกัน',
+    dialogues: [
+      { speaker: 'มิน', text: 'ถ้าคนหนึ่งยังไม่มี HIV แต่รู้ว่าตัวเองมีความเสี่ยง แล้วอยากป้องกันตัวเองตั้งแต่ก่อนเกิดเหตุ แบบนี้ตรงกับ PrEP ใช่ไหม?' },
     ],
+    questionText: 'จากสถานการณ์ของมิน ข้อใดอธิบาย PrEP ได้ถูกต้องที่สุด?',
+    answerOptions: [
+      { answerText: 'ยาที่ใช้หลังจากสัมผัส HIV แล้ว', isCorrect: false },
+      { answerText: 'ยาที่ใช้รักษา AIDS', isCorrect: false },
+      { answerText: 'ยาป้องกัน HIV ก่อนเกิดความเสี่ยง', isCorrect: true },
+      { answerText: 'ยาที่ใช้เฉพาะเมื่อมีอาการของ HIV', isCorrect: false },
+    ],
+    explanation: 'PrEP ใช้สำหรับป้องกันก่อนที่จะเกิดความเสี่ยงหรือก่อนสัมผัสเชื้อ HIV',
   },
   {
-    questionText: 'Virtual DOM ใน React คืออะไร?',
-    answerOptions: [
-      { answerText: 'DOM ที่อยู่ในกล่องความปลอดภัย', isCorrect: false },
-      { answerText: 'การจำลอง DOM ในหน่วยความจำเพื่อปรับปรุงประสิทธิภาพ', isCorrect: true },
-      { answerText: 'DOM สำรองที่แสดงเมื่อเว็บล่ม', isCorrect: false },
-      { answerText: 'เครื่องมือตรวจสอบ DOM อัตโนมัติ', isCorrect: false },
+    chapter: 'บทที่ 3 — “แต่ถ้าเกิดขึ้นไปแล้วล่ะ?”',
+    story: 'คืนนั้น มินส่งข้อความแชทหานัทด้วยน้ำเสียงกังวล นัทนึกถึงสิ่งที่เพิ่งอ่านว่าถ้าเหตุการณ์เกิดขึ้นไปแล้วจะเป็นอีกกรณีหนึ่ง',
+    dialogues: [
+      { speaker: 'มิน', text: 'นัท อยู่ไหม? ฉันมีเรื่องอยากถาม... ถ้าเกิดเหตุการณ์เสี่ยงขึ้นไปแล้ว ยังมีวิธีป้องกันอยู่ไหม?' },
+      { speaker: 'นัท', text: 'PrEP เป็นการป้องกันก่อนความเสี่ยง แต่ถ้าเกิดขึ้นไปแล้ว จะมียาอีกตัวหนึ่ง...' },
     ],
+    questionText: 'ในสถานการณ์ที่ความเสี่ยงเกิดขึ้นไปแล้ว ยาชนิดใดตรงกับสถานการณ์นี้?',
+    answerOptions: [
+      { answerText: 'PrEP', isCorrect: false },
+      { answerText: 'PEP', isCorrect: true },
+      { answerText: 'CD4', isCorrect: false },
+      { answerText: 'AIDS', isCorrect: false },
+    ],
+    explanation: 'PEP คือยาต้านไวรัสที่ใช้ป้องกันการติดเชื้อ HIV หลังจากเกิดความเสี่ยงหรือสัมผัสเชื้อ',
   },
   {
-    questionText: 'prop "key" ใช้ใน React สำหรับอะไร?',
-    answerOptions: [
-      { answerText: 'ตั้งค่ารหัสผ่านของ component', isCorrect: false },
-      { answerText: 'เก็บค่า secret ของ component', isCorrect: false },
-      { answerText: 'ช่วยให้ React ระบุ items ที่เปลี่ยนแปลงได้อย่างมีประสิทธิภาพ', isCorrect: true },
-      { answerText: 'การันตีความปลอดภัยของข้อมูล', isCorrect: false },
+    chapter: 'บทที่ 4 — “เวลาเริ่มนับถอยหลัง”',
+    story: 'นัทถามเวลาที่เกิดเหตุการณ์ มินตอบว่าประมาณตีหนึ่งเมื่อคืน ตอนนี้นัทมองนาฬิกาเป็นเวลา 18:00 น. นัทรู้ว่าเรื่องนี้ไม่ควรรอช้า',
+    dialogues: [
+      { speaker: 'นัท', text: 'เหตุการณ์เกิดขึ้นเมื่อไหร่?' },
+      { speaker: 'มิน', text: 'ประมาณตีหนึ่งเมื่อคืน...' },
     ],
+    questionText: 'นัทควรแนะนำมินอย่างไรจากข้อมูลในบทเรียน?',
+    answerOptions: [
+      { answerText: 'รอให้ครบ 72 ชั่วโมงก่อน', isCorrect: false },
+      { answerText: 'รอจนมีอาการก่อน', isCorrect: false },
+      { answerText: 'ควรรีบดำเนินการโดยเร็วที่สุด', isCorrect: true },
+      { answerText: 'รอประมาณหนึ่งสัปดาห์แล้วค่อยตัดสินใจ', isCorrect: false },
+    ],
+    explanation: 'PEP ควรเริ่มใช้เร็วที่สุด และต้องไม่เกิน 72 ชั่วโมงหลังเกิดความเสี่ยง',
   },
   {
-    questionText: 'state ใน React จะต้องถูกจัดการโดยวิธีใดถึงจะ rerender ได้ถูกต้อง?',
-    answerOptions: [
-      { answerText: 'เปลี่ยนค่าตรง ๆ เช่น state = newValue', isCorrect: false },
-      { answerText: 'ใช้ setState function จาก Hook useState', isCorrect: true },
-      { answerText: 'เรียกใช้ delete กับ state', isCorrect: false },
-      { answerText: 'ใช้ method .push() กับ state', isCorrect: false },
+    chapter: 'บทที่ 5 — “72 ชั่วโมง”',
+    story: 'วันต่อมา นัทกับมินกลับมาอ่านข้อมูลและทบทวนความเข้าใจเรื่องกรอบเวลา 72 ชั่วโมง',
+    dialogues: [
+      { speaker: 'มิน', text: 'ฉันเพิ่งเข้าใจว่า 72 ชั่วโมงไม่ได้หมายความว่าต้องรอให้ครบ 72 ชั่วโมง' },
+      { speaker: 'นัท', text: 'ใช่ ถ้าเป็นสถานการณ์ที่ควรใช้ PEP ก็ต้องรีบดำเนินการทันที ยิ่งเร็วยิ่งดี' },
     ],
+    questionText: 'ข้อใดถูกต้องเกี่ยวกับช่วงเวลาในการเริ่ม PEP ตามเนื้อหาในบทเรียน?',
+    answerOptions: [
+      { answerText: 'ต้องรอให้ครบ 72 ชั่วโมง', isCorrect: false },
+      { answerText: 'เริ่มเมื่อไรก็ได้ภายใน 7 วัน', isCorrect: false },
+      { answerText: 'ควรเริ่มเร็วที่สุด และไม่เกิน 72 ชั่วโมงหลังเกิดความเสี่ยง', isCorrect: true },
+      { answerText: 'เริ่มได้เฉพาะหลังจากมีอาการ', isCorrect: false },
+    ],
+    explanation: 'PEP ต้องเริ่มให้เร็วที่สุด และประสิทธิภาพจะดีที่สุดเมื่อเริ่มภายใน 72 ชั่วโมงแรก',
   },
-];
+  {
+    chapter: 'บทที่ 6 — “อีกหนึ่งสถานการณ์”',
+    story: 'ขณะที่ทั้งคู่กำลังคุยกัน เพื่อนอีกคนชื่อ “เจ” เดินเข้ามาด้วยสีหน้าเครียดและเล่าเรื่องที่เกิดขึ้นให้ฟัง',
+    dialogues: [
+      { speaker: 'เจ', text: 'เมื่อวานฉันเผลอใช้เข็มฉีดยาร่วมกับคนอื่น แล้วเพิ่งมารรู้ว่ามันอาจมีความเสี่ยงต่อ HIV' },
+      { speaker: 'มิน', text: 'กรณีของเจถือเป็นความเสี่ยงที่เกิดขึ้นแล้วใช่ไหม นัท?' },
+    ],
+    questionText: 'สถานการณ์ของเจตรงกับข้อใดมากที่สุด?',
+    answerOptions: [
+      { answerText: 'เป็นสถานการณ์ที่ควรพิจารณา PEP เพราะเกิดความเสี่ยงขึ้นแล้ว', isCorrect: true },
+      { answerText: 'ต้องใช้ PrEP เท่านั้น', isCorrect: false },
+      { answerText: 'ไม่เกี่ยวข้องกับ HIV', isCorrect: false },
+      { answerText: 'ต้องรอให้มีอาการก่อน', isCorrect: false },
+    ],
+    explanation: 'การใช้เข็มฉีดยาร่วมกับผู้อื่นเป็นความเสี่ยงที่เกิดขึ้นแล้ว จึงจัดอยู่ในสถานการณ์ที่ควรพิจารณาใช้ PEP',
+  },
+  {
+    chapter: 'บทที่ 7 — “เวลาที่เหลือ”',
+    story: 'เวลาผ่านไปจนถึง 71 ชั่วโมงหลังเกิดเหตุการณ์ นัทได้รับข้อความด่วนจากเจที่กำลังตื่นตระหนก',
+    timeAlert: '⚠️ 71 ชั่วโมงหลังเกิดเหตุการณ์ (เหลือเวลาอีก 1 ชั่วโมงจะครบ 72 ชม.)',
+    dialogues: [
+      { speaker: 'เจ', text: 'ฉันยังไม่ได้ไปพบแพทย์เลย... ตอนนี้ผ่านไป 71 ชั่วโมงแล้ว ยังทันไหม?' },
+    ],
+    questionText: 'ถ้าเกิดความเสี่ยงมาแล้ว 71 ชั่วโมง เจควรทำอย่างไรจากข้อมูลในบทเรียน?',
+    answerOptions: [
+      { answerText: 'รออีก 1 ชั่วโมง', isCorrect: false },
+      { answerText: 'ไม่ต้องทำอะไรแล้ว', isCorrect: false },
+      { answerText: 'รีบดำเนินการทันที เพราะยังไม่เกิน 72 ชั่วโมง', isCorrect: true },
+      { answerText: 'เปลี่ยนไปใช้ PrEP แทนโดยอัตโนมัติ', isCorrect: false },
+    ],
+    explanation: 'แม้จะผ่านไป 71 ชั่วโมงแล้ว แต่เนื่องจากยังไม่เกิน 72 ชั่วโมง จึงต้องรีบพบแพทย์และรับยา PEP ทันที',
+  },
+  {
+    chapter: 'บทที่ 8 — “ภารกิจ 28 วัน”',
+    story: 'หลังจากเจได้รับการดูแลเรียบร้อย มินสงสัยเรื่องขั้นตอนการทานยา PEP ต่อเนื่อง',
+    dialogues: [
+      { speaker: 'มิน', text: 'ถ้าเริ่มรับยา PEP แล้ว มันต้องกินแค่เม็ดเดียวจบเลยหรือเปล่า?' },
+      { speaker: 'นัท', text: 'ไม่ใช่ครับ ในเอกสารระบุไว้ชัดเจนเรื่องระยะเวลาการกินยาต่อเนื่อง' },
+    ],
+    questionText: 'โดยทั่วไป PEP ใช้ยาต่อเนื่องกี่วันตามเนื้อหาในบทเรียน?',
+    answerOptions: [
+      { answerText: '3 วัน', isCorrect: false },
+      { answerText: '7 วัน', isCorrect: false },
+      { answerText: '14 วัน', isCorrect: false },
+      { answerText: '28 วัน', isCorrect: true },
+    ],
+    explanation: 'การรับประทานยา PEP ต้องรับประทานยาอย่างต่อเนื่องทุกวันเป็นเวลา 28 วัน',
+  },
+  {
+    chapter: 'บทที่ 9 — “ความสับสน”',
+    story: 'หลายวันต่อมา มินกำลังทำสรุปใบงานส่งอาจารย์ แต่นัทสังเกตเห็นว่ามินเขียนสับสนระหว่าง PrEP กับ PEP',
+    dialogues: [
+      { speaker: 'มิน', text: '“PEP ใช้ก่อนเกิดความเสี่ยง ส่วน PrEP ใช้หลังเกิดความเสี่ยง” ฉันเขียนถูกไหม?' },
+      { speaker: 'นัท', text: 'เดี๋ยวก่อน มิน! สลับกันแล้วนะ!' },
+    ],
+    questionText: 'ถ้าต้องแก้ข้อความของมิน ข้อใดถูกต้อง?',
+    answerOptions: [
+      { answerText: 'PrEP = ก่อนเกิดความเสี่ยง / PEP = หลังเกิดความเสี่ยง', isCorrect: true },
+      { answerText: 'PrEP = หลังเกิดความเสี่ยง / PEP = ก่อนเกิดความเสี่ยง', isCorrect: false },
+      { answerText: 'ทั้งสองอย่างใช้เฉพาะหลังเกิดความเสี่ยง', isCorrect: false },
+      { answerText: 'ทั้งสองอย่างใช้เฉพาะก่อนเกิดความเสี่ยง', isCorrect: false },
+    ],
+    explanation: 'จำง่ายๆ: PrEP (Pre = ก่อน) ใช้ก่อนเสี่ยง, PEP (Post = หลัง) ใช้หลังเสี่ยง',
+  },
+  {
+    chapter: 'บทที่ 10 — “การตัดสินใจครั้งสุดท้าย”',
+    story: 'วันสุดท้ายของการเรียน อาจารย์ฉายสถานการณ์จำลอง 2 เหตุการณ์บนจอโปรเจกเตอร์เพื่อให้นักศึกษาตอบคำถาม',
+    dialogues: [
+      { speaker: 'อาจารย์', text: 'สถานการณ์ A: ยังไม่มีเชื้อ HIV แต่มีความเสี่ยงและต้องการป้องกันก่อน\nสถานการณ์ B: เพิ่งเกิดเหตุการณ์ที่อาจสัมผัสเชื้อ HIV\nคู่ไหนคือคำตอบที่ถูกต้อง?' },
+    ],
+    questionText: 'การจับคู่ข้อใดถูกต้องที่สุด? (FINAL CHOICE)',
+    answerOptions: [
+      { answerText: 'A = PEP / B = PrEP', isCorrect: false },
+      { answerText: 'A = PrEP / B = PEP', isCorrect: true },
+      { answerText: 'A = PEP / B = PEP', isCorrect: false },
+      { answerText: 'A = PrEP / B = PrEP', isCorrect: false },
+    ],
+    explanation: 'A (ป้องกันก่อนเสี่ยง) = PrEP, B (ป้องกันหลังสัมผัสเชื้อ) = PEP',
+  },
+]
 
-export default questions;
+export default questions

@@ -1,10 +1,9 @@
 const CAROUSEL_IMAGES = [
-  '/รูปตัวอย่าง/PrEP1.jpg',
-  '/รูปตัวอย่าง/PrEP2.jpg',
-  '/รูปตัวอย่าง/PrEP3.png',
-  '/รูปตัวอย่าง/PrEP4.jpg',
-  '/รูปตัวอย่าง/PrEP5.jpg',
-  '/รูปตัวอย่าง/PrEP6.webp',
+  '/images/1.jpg',
+  '/images/2.jpg',
+  '/images/3.jpg',
+  '/images/4.jpg',
+  '/images/5.jpg',
 ]
 
 export { CAROUSEL_IMAGES }
