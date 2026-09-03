@@ -1,18 +1,23 @@
 const groupSortItems = [
-  { text: 'useState', group: 'Hooks' },
-  { text: 'useEffect', group: 'Hooks' },
-  { text: 'useContext', group: 'Hooks' },
-  { text: 'useReducer', group: 'Hooks' },
-  { text: '<div>', group: 'JSX / DOM' },
-  { text: '<button>', group: 'JSX / DOM' },
-  { text: '<img>', group: 'JSX / DOM' },
-  { text: 'Props', group: 'Component' },
-  { text: 'State', group: 'Component' },
-  { text: 'Children', group: 'Component' },
-  { text: 'ReactDOM', group: 'Library' },
-  { text: 'createRoot', group: 'Library' },
+  // หมวด PrEP (ก่อนเสี่ยง)
+  { text: 'กินล่วงหน้าก่อนมีความเสี่ยง', group: 'PrEP (ป้องกันก่อน)' },
+  { text: 'เหมาะกับผู้มีความเสี่ยงเป็นประจำ', group: 'PrEP (ป้องกันก่อน)' },
+  { text: 'กินทุกวันตามแพทย์สั่ง (Daily PrEP)', group: 'PrEP (ป้องกันก่อน)' },
+  { text: 'ยา TENO-EM (TDF/FTC)', group: 'PrEP (ป้องกันก่อน)' },
+
+  // หมวด PEP (หลังเสี่ยง)
+  { text: 'กินให้เร็วที่สุด ไม่เกิน 72 ชม.', group: 'PEP (ฉุกเฉินหลังเสี่ยง)' },
+  { text: 'ต้องกินต่อเนื่องครบ 28 วัน', group: 'PEP (ฉุกเฉินหลังเสี่ยง)' },
+  { text: 'ใช้กรณีฉุกเฉิน เช่น ถุงยางแตก/เข็มตำ', group: 'PEP (ฉุกเฉินหลังเสี่ยง)' },
+  { text: 'ยา Kocitaf / DTG-based', group: 'PEP (ฉุกเฉินหลังเสี่ยง)' },
+
+  // หมวด ข้อควรรู้/ข้อควรระวังร่วมกัน
+  { text: 'ต้องตรวจเลือดหาเชื้อ HIV ก่อนเริ่มยา', group: 'ข้อควรรู้ร่วมกัน' },
+  { text: 'ไม่สามารถป้องกันหนองใน/ซิฟิลิสได้', group: 'ข้อควรรู้ร่วมกัน' },
+  { text: 'ควรใช้ถุงยางอนามัยควบคู่เสมอ', group: 'ข้อควรรู้ร่วมกัน' },
+  { text: 'ต้องตรวจการทำงานของตับและไต', group: 'ข้อควรรู้ร่วมกัน' },
 ];
 
-const groups = ['Hooks', 'JSX / DOM', 'Component', 'Library'];
+const groups = ['PrEP (ป้องกันก่อน)', 'PEP (ฉุกเฉินหลังเสี่ยง)', 'ข้อควรรู้ร่วมกัน'];
 
 export { groupSortItems, groups };

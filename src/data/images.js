@@ -4,6 +4,8 @@ const CAROUSEL_IMAGES = [
   '/images/3.jpg',
   '/images/4.jpg',
   '/images/5.jpg',
+  '/images/6.jpg',
+  '/images/7.jpg',
 ]
 
 export { CAROUSEL_IMAGES }
