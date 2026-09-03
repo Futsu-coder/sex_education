@@ -39,16 +39,16 @@ function DraggableItem({ text, isPlaced, isDragging }) {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`rounded-xl px-4 py-2 min-h-[44px] flex items-center font-extrabold text-white select-none transition-all touch-none ${
+      className={`rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 min-h-[38px] sm:min-h-[44px] flex items-center text-xs sm:text-base font-extrabold text-white select-none transition-all touch-none ${
         isPlaced
           ? 'opacity-30'
           : isDragging
             ? 'opacity-0'
-            : 'cursor-grab active:cursor-grabbing hover:-translate-y-0.5 hover:shadow-card'
+            : 'cursor-grab active:cursor-grabbing hover:-translate-y-0.5 hover:shadow-card active:scale-95'
       }`}
       style={{
         backgroundColor: GROUP_COLORS[idx % GROUP_COLORS.length],
-        boxShadow: `0 4px 0 ${GROUP_SHADOWS[idx % GROUP_SHADOWS.length]}`,
+        boxShadow: `0 3px 0 ${GROUP_SHADOWS[idx % GROUP_SHADOWS.length]}`,
       }}
     >
       {text}
@@ -70,7 +70,7 @@ function GroupedItem({ text, groupIndex, isDragging, isLocked, isChecked, isCorr
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`group relative flex min-h-[44px] select-none items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-bold transition-colors touch-none ${
+      className={`group relative flex min-h-[36px] sm:min-h-[44px] select-none items-center gap-1 rounded-lg px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-bold transition-colors touch-none ${
         isLocked
           ? 'bg-white text-accent ring-2 ring-accent'
           : isHighlightedWrong
@@ -83,8 +83,8 @@ function GroupedItem({ text, groupIndex, isDragging, isLocked, isChecked, isCorr
       } ${isDragging ? 'opacity-0' : ''}`}
     >
       {text}
-      {isLocked && <span className="text-accent">✓</span>}
-      {isHighlightedWrong && <span className="text-danger">✕</span>}
+      {isLocked && <span className="text-accent text-xs sm:text-sm">✓</span>}
+      {isHighlightedWrong && <span className="text-danger text-xs sm:text-sm">✕</span>}
       {!isLocked && !isChecked && (
         <button
           type="button"
@@ -93,7 +93,7 @@ function GroupedItem({ text, groupIndex, isDragging, isLocked, isChecked, isCorr
             onRemove(text, groupIndex)
           }}
           onPointerDown={(e) => e.stopPropagation()}
-          className="ml-1 flex min-h-[44px] min-w-[44px] -mr-2 items-center justify-center text-primary/60 hover:text-danger"
+          className="ml-0.5 flex min-h-[32px] min-w-[32px] sm:min-h-[40px] sm:min-w-[40px] -mr-1.5 items-center justify-center text-primary/60 hover:text-danger active:scale-110"
           aria-label={`ลบ ${text}`}
         >
           ✕
@@ -126,11 +126,11 @@ function DroppableGroup({
   return (
     <div
       ref={setNodeRef}
-      className={`rounded-3xl bg-white p-6 shadow-card transition-all duration-200 ${
-        !isChecked && hasIncorrect ? 'scale-[1.02]' : ''
+      className={`rounded-2xl sm:rounded-3xl bg-white p-3.5 sm:p-6 shadow-card transition-all duration-200 ${
+        !isChecked && hasIncorrect ? 'scale-[1.01]' : ''
       }`}
       style={{
-        borderWidth: 4,
+        borderWidth: 3,
         borderStyle: 'solid',
         borderColor: !isChecked && hasIncorrect
           ? '#dc2626'
@@ -145,27 +145,27 @@ function DroppableGroup({
                   : '#cfd9e6',
       }}
     >
-      <div className="mb-4 flex items-center gap-3">
+      <div className="mb-2 sm:mb-4 flex items-center gap-2 sm:gap-3">
         <span
-          className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-bold text-white"
+          className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
           style={{ backgroundColor: GROUP_COLORS[groupIndex] }}
         >
-          {isGroupCorrect ? '✓' : ''}
+          {isGroupCorrect ? '✓' : groupIndex + 1}
         </span>
-        <h3 className="text-lg font-extrabold text-ink">{groupName}</h3>
-        <span className="ml-auto text-xs font-bold text-muted">
-          <span className="tabular-nums">{assignedItems.length}</span> รายการ
+        <h3 className="text-sm sm:text-lg font-extrabold text-ink truncate">{groupName}</h3>
+        <span className="ml-auto text-xs font-bold text-muted shrink-0">
+          <span className="tabular-nums">{assignedItems.length}</span> คำ
         </span>
       </div>
 
-      <div className="flex min-h-[56px] flex-wrap gap-2 rounded-xl bg-slate-50 p-2 border border-slate-200">
+      <div className="flex min-h-[48px] sm:min-h-[56px] flex-wrap gap-1.5 sm:gap-2 rounded-xl bg-slate-50 p-2 border border-slate-200">
         {isEmpty ? (
           <span
-            className={`self-center px-1 text-sm text-muted transition-colors ${
-              isOver ? 'text-primary' : ''
+            className={`self-center px-1 text-xs sm:text-sm text-muted transition-colors ${
+              isOver ? 'text-primary font-bold' : ''
             }`}
           >
-            ⇩ ลากคำศัพท์มาวางที่นี่ หรือคลิก + ด้านล่าง
+            ⇩ ลากคำศัพท์มาวางที่นี่
           </span>
         ) : (
           assignedItems.map((text) => (
@@ -392,17 +392,17 @@ function GroupSortPage() {
       <PageBlobs variant="groupsort">
         {showConfetti && <Confetti />}
         <div
-          className="mx-auto max-w-4xl px-4 py-8"
+          className="mx-auto max-w-4xl px-3 py-4 sm:px-4 sm:py-8"
           style={hasStarted ? undefined : { height: '100vh', overflow: 'hidden' }}
         >
           {/* Header */}
-          <div className="mb-6 flex animate-fade-up items-center justify-between">
-            <Link to="/" className="text-lg font-bold hover:underline">
+          <div className="mb-3 sm:mb-6 flex animate-fade-up items-center justify-between gap-2">
+            <Link to="/" className="text-sm sm:text-lg font-bold hover:underline">
               ← จัดกลุ่มคำศัพท์
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <span
-                className={`rounded-xl border-2 bg-white px-4 py-1.5 font-extrabold tabular-nums ${
+                className={`rounded-xl border-2 bg-white px-2.5 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-extrabold tabular-nums ${
                   timeLeft <= 60
                     ? 'border-danger text-danger'
                     : 'border-[#cfd9e6] text-ink'
@@ -410,34 +410,40 @@ function GroupSortPage() {
               >
                 ⏱ {timeLeft}s
               </span>
-              <span className="rounded-xl border-2 border-[#cfd9e6] bg-white px-4 py-1.5 font-extrabold text-primary">
+              <span className="rounded-xl border-2 border-[#cfd9e6] bg-white px-2.5 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-extrabold text-primary">
                 ถูกต้อง <span className="tabular-nums">{lockedCount}</span> / {totalItems}
               </span>
             </div>
           </div>
 
-          <div className="mb-8 animate-fade-up text-center" style={{ animationDelay: '0.05s' }}>
-            <h1 className="mb-2 text-3xl font-extrabold sm:text-4xl">
+          <div className="mb-4 sm:mb-8 animate-fade-up text-center" style={{ animationDelay: '0.05s' }}>
+            <h1 className="mb-1 sm:mb-2 text-2xl font-extrabold sm:text-4xl">
               🧩 จัดกลุ่มคำศัพท์
             </h1>
-            <p className="text-muted">
-              ลากคำศัพท์ไปวางในกลุ่มที่ถูกต้อง (หรือคลิก + เพื่อเพิ่ม) ข้อที่ถูกจะล็อกไว้
-              ⏱ มีเวลาให้ทำ 5 นาที
+            <p className="text-xs sm:text-base text-muted">
+              ลากคำศัพท์ไปวางในกลุ่มที่ถูกต้อง ข้อที่ถูกจะล็อกไว้ ⏱ มีเวลาให้ทำ 5 นาที
             </p>
           </div>
 
-          {/* Available items */}
+          {/* Sticky Word Tray */}
           <div
-            className="mb-8 animate-fade-up rounded-3xl bg-white p-6 shadow-card border-2 border-[#cfd9e6]"
+            className="sticky top-2 z-20 mb-4 sm:mb-8 animate-fade-up rounded-2xl sm:rounded-3xl bg-white/95 p-3 sm:p-5 shadow-card backdrop-blur-sm border-2 border-[#cfd9e6]"
             style={{ animationDelay: '0.1s' }}
           >
-            <h2 className="mb-4 text-sm font-extrabold uppercase tracking-wide text-primary">
-              🎒 คำศัพท์ที่ต้องจัดวาง
-            </h2>
+            <div className="mb-2 sm:mb-3 flex items-center justify-between">
+              <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-primary">
+                🎒 คำศัพท์ที่ต้องจัดวาง
+              </h2>
+              {!allCorrect && (
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] sm:text-xs font-bold text-primary">
+                  เหลือ <span className="tabular-nums">{totalItems - placedCount}</span> คำ
+                </span>
+              )}
+            </div>
             {allCorrect ? (
-              <p className="font-extrabold text-accent">✅ จัดวางครบและถูกต้องทั้งหมด!</p>
+              <p className="text-sm sm:text-base font-extrabold text-accent">✅ จัดวางครบและถูกต้องทั้งหมด!</p>
             ) : (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex max-h-[120px] sm:max-h-none flex-wrap gap-1.5 sm:gap-3 overflow-y-auto pr-1">
                 {groupSortItems
                   .filter((i) => !isLockedText(i.text))
                   .map((item) => (
@@ -453,7 +459,7 @@ function GroupSortPage() {
           </div>
 
           {/* Groups */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2">
             {groups.map((groupName, gi) => (
               <DroppableGroup
                 key={groupName}
@@ -473,24 +479,24 @@ function GroupSortPage() {
 
           {/* Unplaced & unlocked hints */}
           {!isChecked && placedCount < totalItems && (
-            <p className="mt-4 text-center text-sm font-bold text-amber-600">
+            <p className="mt-3 sm:mt-4 text-center text-xs sm:text-sm font-bold text-amber-600">
               ⚠️ กรุณาวางคำศัพท์ให้ครบทุกข้อก่อนตรวจคำตอบ (เหลืออีก {totalItems - placedCount} คำ)
             </p>
           )}
           {!isChecked && placedCount === totalItems && lockedCount < totalItems && (
-            <p className="mt-4 text-center text-sm font-bold text-primary">
+            <p className="mt-3 sm:mt-4 text-center text-xs sm:text-sm font-bold text-primary">
               ✨ วางครบทุกคำแล้ว สามารถกดตรวจคำตอบได้เลย!
             </p>
           )}
 
           {/* Actions */}
           {!isChecked && !timeUp && (
-            <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+            <div className="mt-6 sm:mt-8 flex flex-col justify-center gap-3 sm:gap-4 sm:flex-row">
               <button
                 type="button"
                 onClick={checkAnswer}
                 disabled={placedCount < totalItems}
-                className={`rounded-2xl px-8 py-4 text-lg font-extrabold transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${
+                className={`rounded-xl sm:rounded-2xl px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-extrabold transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${
                   placedCount === totalItems
                     ? 'bg-accent text-white hover:-translate-y-0.5 hover:shadow-lift'
                     : 'cursor-not-allowed bg-slate-200 text-slate-400'
@@ -501,7 +507,7 @@ function GroupSortPage() {
               <button
                 type="button"
                 onClick={reset}
-                className="rounded-2xl bg-white px-8 py-4 text-lg font-extrabold text-primary ring-1 ring-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:ring-primary active:translate-y-0 active:scale-[0.98]"
+                className="rounded-xl sm:rounded-2xl bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-extrabold text-primary ring-1 ring-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:ring-primary active:translate-y-0 active:scale-[0.98]"
               >
                 ↺ เริ่มใหม่
               </button>
