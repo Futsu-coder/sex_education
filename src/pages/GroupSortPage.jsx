@@ -285,7 +285,7 @@ function GroupSortPage() {
     ).length
 
   const checkAnswer = () => {
-    if (isChecked || timeUp || !hasStarted) return
+    if (isChecked || timeUp || !hasStarted || placedCount < totalItems) return
 
     const newlyLocked = groupSortItems
       .filter((i) => !isLockedText(i.text) && isCorrectlyPlaced(i.text))
@@ -471,10 +471,15 @@ function GroupSortPage() {
             ))}
           </div>
 
-          {/* Unlocked hint */}
-          {!isChecked && lockedCount > 0 && placedCount > lockedCount && (
-            <p className="mt-4 text-center text-sm text-muted">
-              เหลือ {placedCount - lockedCount} ข้อที่ยังต้องตรวจ
+          {/* Unplaced & unlocked hints */}
+          {!isChecked && placedCount < totalItems && (
+            <p className="mt-4 text-center text-sm font-bold text-amber-600">
+              ⚠️ กรุณาวางคำศัพท์ให้ครบทุกข้อก่อนตรวจคำตอบ (เหลืออีก {totalItems - placedCount} คำ)
+            </p>
+          )}
+          {!isChecked && placedCount === totalItems && lockedCount < totalItems && (
+            <p className="mt-4 text-center text-sm font-bold text-primary">
+              ✨ วางครบทุกคำแล้ว สามารถกดตรวจคำตอบได้เลย!
             </p>
           )}
 
@@ -484,11 +489,11 @@ function GroupSortPage() {
               <button
                 type="button"
                 onClick={checkAnswer}
-                disabled={placedCount === 0}
-                className={`rounded-2xl px-8 py-4 text-lg font-extrabold text-white transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${
-                  placedCount > 0
-                    ? 'bg-accent hover:-translate-y-0.5 hover:shadow-lift'
-                    : 'cursor-not-allowed bg-slate-300'
+                disabled={placedCount < totalItems}
+                className={`rounded-2xl px-8 py-4 text-lg font-extrabold transition-all duration-200 active:translate-y-0 active:scale-[0.98] ${
+                  placedCount === totalItems
+                    ? 'bg-accent text-white hover:-translate-y-0.5 hover:shadow-lift'
+                    : 'cursor-not-allowed bg-slate-200 text-slate-400'
                 }`}
               >
                 ✅ ตรวจคำตอบ
