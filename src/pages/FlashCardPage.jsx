@@ -260,13 +260,17 @@ function FlashCardPage() {
             style={{ perspective: '1500px', animationDelay: '0.1s' }}
           >
             <div
-              className="relative min-h-[320px] cursor-pointer transition-transform"
+              className={`relative min-h-[320px] transition-transform ${hasAnswered ? 'cursor-pointer' : 'cursor-default'}`}
               style={{
                 transformStyle: 'preserve-3d',
                 transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
                 transition: 'transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1)',
               }}
-              onClick={() => setIsFlipped((f) => !f)}
+              onClick={() => {
+                if (hasAnswered) {
+                  setIsFlipped((f) => !f)
+                }
+              }}
             >
               {/* Front: Question */}
               <div

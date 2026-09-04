@@ -132,8 +132,10 @@ export function AnimatedNumber({
 const CONFETTI_COLORS = ['#2563eb', '#0d9488', '#f59e0b', '#dc2626', '#8b5cf6', '#ec4899']
 
 export function Confetti({ count = 60 }) {
-  const pieces = useMemo(
-    () =>
+  const [pieces, setPieces] = useState([])
+
+  useEffect(() => {
+    setPieces(
       Array.from({ length: count }).map(() => {
         const size = 6 + Math.random() * 8
         return {
@@ -146,8 +148,8 @@ export function Confetti({ count = 60 }) {
           rotate: `${Math.random() * 360}deg`,
         }
       }),
-    [count],
-  )
+    )
+  }, [count])
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[60] overflow-hidden" aria-hidden="true">
